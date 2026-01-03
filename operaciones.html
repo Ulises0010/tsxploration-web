@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asignación Oficial de Tareas de Limpieza</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to right, #f4f6f9, #eaf3ff);
+        color: #333;
+        position: relative;
+    }
+    /* Marca de agua */
+    body::after {
+        content: "Ulises Jimenez - Programador de la página";
+        position: fixed;
+        bottom: 10px;
+        right: 15px;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.35);
+        transform: rotate(-10deg);
+        pointer-events: none;
+        z-index: 9999;
+        font-weight: bold;
+    }
+    header {
+        background: linear-gradient(90deg, #0078D7, #005bb5);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    header h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+    header h2 {
+        font-size: 18px;
+        font-weight: normal;
+        margin-top: 5px;
+        color: #dfefff;
+    }
+    .container {
+        max-width: 950px;
+        margin: 30px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    .instructions {
+        font-size: 16px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #444;
+    }
+    .counter {
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #0078D7;
+        font-weight: bold;
+    }
+    .progress-bar {
+        width: 80%;
+        margin: 10px auto;
+        background: #ddd;
+        border-radius: 20px;
+        overflow: hidden;
+        height: 22px;
+    }
+    .progress {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #28a745, #218838);
+        transition: width 0.5s;
+    }
+    .percentage {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 5px;
+        color: #333;
+    }
+    .motivacion {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #0078D7;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #0078D7;
+        color: white;
+    }
+    td a {
+        color: #0078D7;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    td a:hover {
+        text-decoration: underline;
+    }
+    /* Colores por área */
+    .oficina { background-color: #e8f4ff; }
+    .sala { background-color: #fff3e6; }
+    .cocina { background-color: #e6ffe6; }
+    .pasillo { background-color: #f9e6ff; }
+    .banos { background-color: #e6f9ff; }
+    .recepcion { background-color: #fffbe6; }
+    .almacen { background-color: #f2ffe6; }
+    .estacionamiento { background-color: #ffe6e6; }
+    .jardin { background-color: #e6fff9; }
+    .respuestas {
+        margin-top: 30px;
+        text-align: center;
+    }
+    .respuestas a {
+        background-color: #28a745;
+        color: #fff;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 18px;
+    }
+    .respuestas a:hover {
+        background-color: #218838;
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>💪 ¡Equipo en Acción!</h1>
+    <h2>“Cada tarea refleja tu compromiso. ¿Cómo quieres que te recuerden: por tu acción o por tu ausencia?”</h2>
+</header>
+<div class="container">
+    <p class="instructions"><strong>Instrucciones:</strong> Ingresa al enlace de tu tarea, realiza la limpieza y sube la foto del resultado. ¡Tu compromiso cuenta!</p>
+    <div class="counter">✅ Tareas completadas: <span id="completedCount">0</span> / 9</div>
+    <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    <div class="percentage" id="percentageText">Progreso: 0%</div>
+    <div class="motivacion" id="motivacionText"></div>
+    <table>
+        <thead>
+            <tr><th>Persona</th><th>Área Asignada</th><th>Formulario</th></tr>
+        </thead>
+        <tbody>
+            <tr class="oficina"><td>🧹 Alejandro Gaza</td><td>🏢 Oficina Principal</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="sala"><td>🧽 Esmeralda Mateo</td><td>🛋 Sala de Reuniones</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="cocina"><td>🍴 Jimena Herrera</td><td>🍳 Cocina</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="pasillo"><td>🚶 Lourdes Mata</td><td>🛤 Pasillo</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="banos"><td>🚻 Linsay Ariana</td><td>🚿 Baños</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="recepcion"><td>👋 Magdalena Trejo</td><td>🛎 Recepción</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="almacen"><td>📦 Merary Romero</td><td>🏗 Almacén</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="estacionamiento"><td>🚗 Obel Olivares</td><td>🅿 Estacionamiento</td><td><a href="#">Abrir Formulario</a></td></tr>
+            <tr class="jardin"><td>🌿 Sharlin</td><td>🌳 Jardín</td><td><a href="#">Abrir Formulario</a></td></tr>
+        </tbody>
+    </table>
+    <div class="respuestas">
+        <h2>📂 Ver Respuestas Completadas</h2>
+        <a href="#">Abrir Respuestas</a>
+    </div>
+</div>
+<script>
+    let completed = 0;
+    function markCompleted(link) {
+        if (!link.classList.contains('done')) {
+            completed++;
+            document.getElementById('completedCount').innerText = completed;
+            link.classList.add('done');
+            link.style.color = 'green';
+            link.innerText = '✔ Completado';
+            let progress = (completed / 9) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('percentageText').innerText = 'Progreso: ' + Math.round(progress) + '%';
+            if (progress === 100) {
+                document.getElementById('motivacionText').innerText = '🎉 ¡Todas las tareas completadas! Reflexiona: ¿Qué dice esto de tu compromiso? Cada acción habla más que mil palabras.';
+            } else {
+                document.getElementById('motivacionText').innerText = 'Cada tarea completada refleja tu responsabilidad. ¿Cómo quieres que te perciban?';
+            }
+        }
+    }
+</script>
+</body>
+</html>
