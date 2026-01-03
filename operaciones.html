@@ -1,197 +1,216 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asignación Oficial de Tareas de Limpieza</title>
-<style>
-    body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(to right, #f4f6f9, #eaf3ff);
-        color: #333;
-        position: relative;
-    }
-    /* Marca de agua */
-    body::after {
-        content: "Ulises Jimenez - Programador de la página";
-        position: fixed;
-        bottom: 10px;
-        right: 15px;
-        font-size: 16px;
-        color: rgba(0, 0, 0, 0.35);
-        transform: rotate(-10deg);
-        pointer-events: none;
-        z-index: 9999;
-        font-weight: bold;
-    }
-    header {
-        background: linear-gradient(90deg, #0078D7, #005bb5);
-        color: white;
-        padding: 30px 20px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    header h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
-    header h2 {
-        font-size: 18px;
-        font-weight: normal;
-        margin-top: 5px;
-        color: #dfefff;
-    }
-    .container {
-        max-width: 950px;
-        margin: 30px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-    .instructions {
-        font-size: 16px;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #444;
-    }
-    .counter {
-        text-align: center;
-        font-size: 20px;
-        margin-bottom: 10px;
-        color: #0078D7;
-        font-weight: bold;
-    }
-    .progress-bar {
-        width: 80%;
-        margin: 10px auto;
-        background: #ddd;
-        border-radius: 20px;
-        overflow: hidden;
-        height: 22px;
-    }
-    .progress {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #28a745, #218838);
-        transition: width 0.5s;
-    }
-    .percentage {
-        text-align: center;
-        font-size: 18px;
-        margin-top: 5px;
-        color: #333;
-    }
-    .motivacion {
-        text-align: center;
-        font-size: 18px;
-        margin-top: 15px;
-        font-weight: bold;
-        color: #0078D7;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
-    }
-    th {
-        background-color: #0078D7;
-        color: white;
-    }
-    td a {
-        color: #0078D7;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    td a:hover {
-        text-decoration: underline;
-    }
-    /* Colores por área */
-    .oficina { background-color: #e8f4ff; }
-    .sala { background-color: #fff3e6; }
-    .cocina { background-color: #e6ffe6; }
-    .pasillo { background-color: #f9e6ff; }
-    .banos { background-color: #e6f9ff; }
-    .recepcion { background-color: #fffbe6; }
-    .almacen { background-color: #f2ffe6; }
-    .estacionamiento { background-color: #ffe6e6; }
-    .jardin { background-color: #e6fff9; }
-    .respuestas {
-        margin-top: 30px;
-        text-align: center;
-    }
-    .respuestas a {
-        background-color: #28a745;
-        color: #fff;
-        padding: 12px 25px;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 18px;
-    }
-    .respuestas a:hover {
-        background-color: #218838;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS | Operaciones</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♠️</text></svg>">
+    
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --bg-dark: #0a0a12;
+            --glass-panel: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #00c6ff;
+            --accent-gold: #d4af37;
+            --text-main: #ffffff;
+            --text-dim: #8888aa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-dark) 80%);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden; /* Evita scroll en la vista principal */
+            display: flex;
+        }
+
+        /* --- SIDEBAR (Barra Lateral) --- */
+        .sidebar {
+            width: 80px;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; align-items: center; padding-top: 30px;
+            transition: width 0.3s ease;
+            z-index: 10;
+        }
+        .sidebar:hover { width: 220px; } /* Se expande al pasar el mouse (en PC) */
+
+        .brand-icon { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; cursor: pointer; }
+        
+        .nav-item {
+            width: 100%; padding: 15px 0;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dim); cursor: pointer; transition: 0.3s;
+            text-decoration: none; position: relative;
+        }
+        .nav-item:hover, .nav-item.active { color: var(--accent-blue); background: var(--glass-panel); }
+        .nav-item::before { /* Línea indicadora */
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 3px; 
+            background: var(--accent-blue); opacity: 0; transition: 0.3s;
+        }
+        .nav-item.active::before { opacity: 1; }
+
+        .icon { font-size: 1.5rem; }
+        .nav-text { 
+            position: absolute; left: 70px; 
+            font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;
+            opacity: 0; white-space: nowrap; transition: 0.2s;
+        }
+        .sidebar:hover .nav-text { opacity: 1; }
+
+        /* --- MAIN CONTENT (Área de Trabajo) --- */
+        .main-content {
+            flex: 1; padding: 30px;
+            overflow-y: auto; /* Scroll solo aquí */
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px;
+        }
+        .welcome-text h1 { font-size: 1.8rem; font-weight: 300; }
+        .welcome-text span { font-weight: 800; color: var(--accent-blue); }
+        .date-display { color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 1px; font-weight: bold; }
+
+        /* --- DASHBOARD GRID --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- CARDS (Tarjetas) --- */
+        .card {
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-blue); box-shadow: 0 10px 30px rgba(0, 198, 255, 0.1); }
+
+        .card-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .card-value { font-size: 2rem; font-weight: bold; color: #fff; }
+        .card-status { font-size: 0.8rem; margin-top: 10px; }
+        .status-good { color: #00ff88; }
+        .status-warn { color: #ffcc00; }
+
+        /* --- ACTION BUTTONS --- */
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-blue), #0056b3);
+            border: none; padding: 10px 20px; border-radius: 8px; color: #fff; font-weight: bold;
+            cursor: pointer; transition: 0.3s; margin-top: auto;
+        }
+        .action-btn:hover { box-shadow: 0 0 15px var(--accent-blue); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: 60px; flex-direction: row; justify-content: space-around; padding: 0; position: fixed; bottom: 0; border-right: none; border-top: 1px solid var(--glass-border); background: #000; }
+            .sidebar:hover { width: 100%; }
+            .nav-text { display: none; } /* Ocultar texto en móvil */
+            .main-content { padding: 20px; padding-bottom: 80px; } /* Espacio para el menú abajo */
+            .brand-icon { display: none; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
-<header>
-    <h1>💪 ¡Equipo en Acción!</h1>
-    <h2>“Cada tarea refleja tu compromiso. ¿Cómo quieres que te recuerden: por tu acción o por tu ausencia?”</h2>
-</header>
-<div class="container">
-    <p class="instructions"><strong>Instrucciones:</strong> Ingresa al enlace de tu tarea, realiza la limpieza y sube la foto del resultado. ¡Tu compromiso cuenta!</p>
-    <div class="counter">✅ Tareas completadas: <span id="completedCount">0</span> / 9</div>
-    <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
-    <div class="percentage" id="percentageText">Progreso: 0%</div>
-    <div class="motivacion" id="motivacionText"></div>
-    <table>
-        <thead>
-            <tr><th>Persona</th><th>Área Asignada</th><th>Formulario</th></tr>
-        </thead>
-        <tbody>
-            <tr class="oficina"><td>🧹 Alejandro Gaza</td><td>🏢 Oficina Principal</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="sala"><td>🧽 Esmeralda Mateo</td><td>🛋 Sala de Reuniones</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="cocina"><td>🍴 Jimena Herrera</td><td>🍳 Cocina</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="pasillo"><td>🚶 Lourdes Mata</td><td>🛤 Pasillo</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="banos"><td>🚻 Linsay Ariana</td><td>🚿 Baños</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="recepcion"><td>👋 Magdalena Trejo</td><td>🛎 Recepción</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="almacen"><td>📦 Merary Romero</td><td>🏗 Almacén</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="estacionamiento"><td>🚗 Obel Olivares</td><td>🅿 Estacionamiento</td><td><a href="#">Abrir Formulario</a></td></tr>
-            <tr class="jardin"><td>🌿 Sharlin</td><td>🌳 Jardín</td><td><a href="#">Abrir Formulario</a></td></tr>
-        </tbody>
-    </table>
-    <div class="respuestas">
-        <h2>📂 Ver Respuestas Completadas</h2>
-        <a href="#">Abrir Respuestas</a>
-    </div>
-</div>
-<script>
-    let completed = 0;
-    function markCompleted(link) {
-        if (!link.classList.contains('done')) {
-            completed++;
-            document.getElementById('completedCount').innerText = completed;
-            link.classList.add('done');
-            link.style.color = 'green';
-            link.innerText = '✔ Completado';
-            let progress = (completed / 9) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-            document.getElementById('percentageText').innerText = 'Progreso: ' + Math.round(progress) + '%';
-            if (progress === 100) {
-                document.getElementById('motivacionText').innerText = '🎉 ¡Todas las tareas completadas! Reflexiona: ¿Qué dice esto de tu compromiso? Cada acción habla más que mil palabras.';
-            } else {
-                document.getElementById('motivacionText').innerText = 'Cada tarea completada refleja tu responsabilidad. ¿Cómo quieres que te perciban?';
-            }
+
+    <nav class="sidebar">
+        <div class="brand-icon">♠️</div>
+        
+        <a href="#" class="nav-item active">
+            <span class="icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="icon">📁</span>
+            <span class="nav-text">Proyectos</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="icon">🤖</span>
+            <span class="nav-text">I.A. Nexus</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="icon">⚙️</span>
+            <span class="nav-text">Ajustes</span>
+        </a>
+        <a href="index.html" class="nav-item" style="margin-top: auto; color: #ff5b5b;">
+            <span class="icon">🚪</span>
+            <span class="nav-text">Desconectar</span>
+        </a>
+    </nav>
+
+    <main class="main-content">
+        
+        <header class="header">
+            <div class="welcome-text">
+                <h1 id="greeting">Hola, <span>Boss</span></h1>
+                <p style="color: #888; font-size: 0.9rem;">Sistema Operativo TSX v1.0</p>
+            </div>
+            <div class="date-display" id="clock">00:00:00</div>
+        </header>
+
+        <div class="grid-container">
+            
+            <div class="card">
+                <div class="card-title"><span>🟢</span> ESTADO DEL SISTEMA</div>
+                <div class="card-value">ONLINE</div>
+                <div class="card-status status-good">Red Neural: Estable</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><span>📁</span> PROYECTOS ACTIVOS</div>
+                <div class="card-value">3</div>
+                <div class="card-status">En desarrollo...</div>
+                <button class="action-btn" style="margin-top: 15px;">Ver Detalles</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><span>💰</span> BALANCE MENSUAL</div>
+                <div class="card-value">$0.00</div>
+                <div class="card-status status-warn">Pendiente de actualización</div>
+            </div>
+
+            <div class="card" style="grid-column: span 1;">
+                <div class="card-title"><span>📝</span> NOTA RÁPIDA</div>
+                <textarea style="width: 100%; background: transparent; border: none; color: #fff; height: 60px; resize: none; outline: none;" placeholder="Escribe aquí..."></textarea>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // --- RELOJ EN TIEMPO REAL ---
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('clock').innerHTML = `${dateString} <br> ${timeString}`;
         }
-    }
-</script>
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- SALUDO SEGÚN LA HORA ---
+        const hour = new Date().getHours();
+        const greeting = document.getElementById('greeting');
+        if (hour < 12) greeting.innerHTML = "Buenos días, <span>Boss</span>";
+        else if (hour < 18) greeting.innerHTML = "Buenas tardes, <span>Boss</span>";
+        else greeting.innerHTML = "Buenas noches, <span>Boss</span>";
+    </script>
+
 </body>
 </html>
