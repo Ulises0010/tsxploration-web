@@ -18,7 +18,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
             height: 100vh;
@@ -27,13 +27,14 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             color: #fff;
-            transition: background 0.2s; 
         }
 
-        /* --- 2. EFECTOS ESPECIALES --- */
+        /* --- 2. EFECTOS ESPECIALES (FONDO) --- */
         #particle-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9999; overflow: hidden;
+            pointer-events: none; /* Dejar pasar clics */
+            z-index: 1; /* Nivel bajo */
+            overflow: hidden;
         }
         .particle {
             position: absolute; width: 4px; height: 4px; border-radius: 50%;
@@ -41,16 +42,13 @@
         }
 
         body.nuclear-active { animation: nuclearShake 0.5s infinite, nuclearFlash 1s infinite; }
-
-        @keyframes nuclearShake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
+        @keyframes nuclearShake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, 2px); } 100% { transform: translate(1px, -2px); } }
         @keyframes nuclearFlash { 0%, 100% { background: #000; } 50% { background: #500000; } }
 
-        /* --- 3. UI ELEMENTS --- */
-        .access-btn-container { position: absolute; top: 20px; left: 20px; z-index: 100; }
+        /* --- 3. ELEMENTOS DE INTERFAZ (NIVEL SUPERIOR) --- */
+        .ui-layer { position: relative; z-index: 100; } /* Asegura que todo esto esté sobre las partículas */
+
+        .access-btn-container { position: absolute; top: 20px; left: 20px; z-index: 200; }
         .access-btn {
             background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
             color: #aaa; font-size: 0.75rem; font-weight: bold; 
@@ -58,21 +56,20 @@
             backdrop-filter: blur(5px); transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; gap: 5px;
         }
-        .access-btn:hover { color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 198, 255, 0.3); transform: translateX(5px); }
+        .access-btn:hover, .access-btn:active { color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 198, 255, 0.3); transform: scale(1.05); }
 
         .lang-bar {
-            position: absolute; top: 20px; right: 20px; z-index: 100; display: flex; gap: 8px;
+            position: absolute; top: 20px; right: 20px; z-index: 200; display: flex; gap: 8px;
             background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px);
         }
         .lang-btn {
             background: transparent; border: none; color: #aaa; font-size: 0.75rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s; padding: 5px 8px; border-radius: 10px; text-transform: uppercase;
+            transition: 0.3s; padding: 5px 8px; border-radius: 10px;
         }
-        .lang-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
         .lang-btn.active { background: var(--gold); color: #000; box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
 
-        .brand-container { text-align: center; margin-bottom: 40px; animation: fadeInUp 1.5s ease-out; position: relative; z-index: 5; }
+        .brand-container { text-align: center; margin-bottom: 40px; animation: fadeInUp 1.5s ease-out; position: relative; z-index: 100; }
         .logo {
             font-size: 4rem; font-weight: 800; letter-spacing: 8px;
             background: linear-gradient(to right, #fff, #e0e0e0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -84,9 +81,8 @@
         .panel-glass {
             background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border);
             padding: 50px 40px; border-radius: 24px; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
-            width: 360px; text-align: center; animation: fadeInUp 1.5s ease-out 0.3s backwards; position: relative; z-index: 10;
+            width: 360px; text-align: center; animation: fadeInUp 1.5s ease-out 0.3s backwards; position: relative; z-index: 100;
         }
-        .input-label { display: block; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; color: rgba(255,255,255,0.5); font-weight: 600; }
         .input-code {
             width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px;
             color: white; text-align: center; letter-spacing: 6px; font-size: 1.3rem; font-weight: bold; outline: none; transition: 0.4s;
@@ -97,20 +93,20 @@
             border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
             cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px -10px rgba(0, 198, 255, 0.5);
         }
-        .btn-enter:hover { transform: scale(1.02); background: linear-gradient(135deg, #00c6ff, var(--accent-blue)); }
-        .error-msg { color: #ff5b5b; margin-top: 20px; font-weight: 600; letter-spacing: 1px; display: none; text-shadow: 0 0 10px rgba(255,91,91,0.5); }
+        .btn-enter:hover { transform: scale(1.02); }
+        .error-msg { color: #ff5b5b; margin-top: 20px; font-weight: 600; display: none; }
 
         .info-trigger {
-            position: absolute; bottom: 30px; cursor: pointer;
+            position: absolute; bottom: 30px; cursor: pointer; z-index: 200;
             color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 2px;
-            transition: 0.3s; text-transform: uppercase; border-bottom: 1px solid transparent; z-index: 100; 
+            transition: 0.3s; text-transform: uppercase; border-bottom: 1px solid transparent; 
         }
         .info-trigger:hover { color: var(--gold); border-color: var(--gold); }
 
         /* --- 4. MODALES --- */
         .ts-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 200; backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.95); z-index: 300; backdrop-filter: blur(15px);
             align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease;
         }
         .ts-modal.open { opacity: 1; }
@@ -120,36 +116,29 @@
             padding: 40px; border-radius: 20px; text-align: center; position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
             opacity: 0; filter: brightness(500%) blur(30px); transform: scale(0.8);
-            transition: opacity 0.2s ease, filter 1s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .ts-modal.open .modal-card { opacity: 1; filter: brightness(100%) blur(0px); transform: scale(1); }
 
         .manifesto-card { border-color: var(--gold); box-shadow: 0 0 60px rgba(212, 175, 55, 0.3); }
-        .manifesto-title { color: var(--gold); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .manifesto-text { color: #ccc; line-height: 1.8; font-size: 0.95rem; margin-bottom: 30px; text-align: justify; white-space: pre-line; max-height: 60vh; overflow-y: auto; }
 
         .request-card { border-color: var(--accent-blue); box-shadow: 0 0 60px rgba(0, 198, 255, 0.3); }
-        .request-title { color: var(--accent-blue); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        .nuclear-card { border: 2px solid var(--nuclear-red); background: #1a0000; box-shadow: 0 0 100px var(--nuclear-red); }
-        .nuclear-symbol { font-size: 4rem; color: var(--nuclear-red); animation: pulseNuclear 0.5s infinite alternate; }
-        .nuclear-text { color: var(--nuclear-red); font-weight: bold; letter-spacing: 2px; margin: 20px 0; font-size: 1.2rem; text-transform: uppercase;}
-        @keyframes pulseNuclear { from { opacity: 0.5; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
-
         /* Formulario */
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-label { color: #888; font-size: 0.8rem; margin-left: 10px; margin-bottom: 5px; display: block; }
-        .form-input, .form-textarea { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: inherit; outline: none; transition: 0.3s; }
-        .form-input:focus, .form-textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px rgba(0, 198, 255, 0.2); }
+        .form-input, .form-textarea { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; outline: none; transition: 0.3s; }
+        .form-input:focus, .form-textarea:focus { border-color: var(--accent-blue); }
         .form-textarea { height: 80px; resize: none; }
         
         .close-btn-modal { padding: 10px 30px; background: transparent; border: 1px solid #555; color: #fff; cursor: pointer; transition: 0.3s; border-radius: 30px; font-weight: bold; margin-top: 10px; }
-        .close-btn-modal.gold:hover { border-color: var(--gold); color: var(--gold); }
-        .close-btn-modal.blue:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-        .close-btn-modal.red:hover { border-color: var(--nuclear-red); color: var(--nuclear-red); background: rgba(255,0,0,0.1); }
+        .submit-btn { width: 100%; padding: 12px; background: var(--accent-blue); border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
 
-        .submit-btn { width: 100%; padding: 12px; background: var(--accent-blue); border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-        .submit-btn:hover { background: #fff; box-shadow: 0 0 20px var(--accent-blue); }
+        /* NUCLEAR */
+        .nuclear-card { border: 2px solid var(--nuclear-red); background: #1a0000; }
+        .nuclear-symbol { font-size: 4rem; color: var(--nuclear-red); animation: pulseNuclear 0.5s infinite alternate; }
+        @keyframes pulseNuclear { from { opacity: 0.5; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
 
         @media (max-width: 500px) { .access-btn-container { top: 70px; left: 50%; transform: translateX(-50%); width: 100%; display: flex; justify-content: center;} }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -166,67 +155,67 @@
     <div id="particle-container"></div>
 
     <div class="access-btn-container">
-        <button class="access-btn" id="btn-request" onclick="reproducirSonido('click'); invocarTornado(event, 'requestModal')">
+        <button class="access-btn" id="btn-request" onclick="triggerAction(this, 'requestModal')">
             ♠️ SOLICITAR ACCESO
         </button>
     </div>
 
     <div class="lang-bar">
-        <button id="btn-es" class="lang-btn active" onclick="reproducirSonido('click'); setLanguage('es')">ES</button>
-        <button id="btn-en" class="lang-btn" onclick="reproducirSonido('click'); setLanguage('en')">EN</button>
-        <button id="btn-zh" class="lang-btn" onclick="reproducirSonido('click'); setLanguage('zh')">中</button>
-        <button id="btn-hi" class="lang-btn" onclick="reproducirSonido('click'); setLanguage('hi')">हि</button>
-        <button id="btn-fr" class="lang-btn" onclick="reproducirSonido('click'); setLanguage('fr')">FR</button>
+        <button id="btn-es" class="lang-btn active" onclick="setLanguage('es')">ES</button>
+        <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button id="btn-zh" class="lang-btn" onclick="setLanguage('zh')">中</button>
+        <button id="btn-hi" class="lang-btn" onclick="setLanguage('hi')">हि</button>
+        <button id="btn-fr" class="lang-btn" onclick="setLanguage('fr')">FR</button>
     </div>
 
-    <div class="brand-container">
+    <div class="brand-container ui-layer">
         <div class="logo"><span class="spade">♠️</span> TSX <span class="spade">♠️</span></div>
         <div class="tagline" id="txt-tagline">The Solitary Xploration</div>
     </div>
 
-    <div class="panel-glass">
+    <div class="panel-glass ui-layer">
         <span class="input-label" id="txt-auth">// AUTENTICACIÓN NEXUS //</span>
         <input type="password" id="passInput" class="input-code" placeholder="••••••">
-        <button class="btn-enter" id="btn-connect" onclick="reproducirSonido('click'); verificarAcceso()">Conectar</button>
+        <button class="btn-enter" id="btn-connect" onclick="verificarAcceso()">Conectar</button>
         <p id="error" class="error-msg">Acceso Denegado</p>
     </div>
 
-    <div class="info-trigger" id="btn-about" onclick="reproducirSonido('click'); invocarTornado(event, 'manifestoModal')">
+    <div class="info-trigger ui-layer" id="btn-about" onclick="triggerAction(this, 'manifestoModal')">
         ℹ️ SOBRE TSXPLORATION
     </div>
 
     <div id="manifestoModal" class="ts-modal">
         <div class="modal-card manifesto-card">
-            <h2 class="manifesto-title" id="txt-about-title">NUESTRA IDENTIDAD</h2>
+            <h2 class="manifesto-title" id="txt-about-title" style="color:var(--gold); margin-bottom:20px;">NUESTRA IDENTIDAD</h2>
             <div class="manifesto-text" id="txt-about-desc"></div>
-            <button class="close-btn-modal gold" onclick="reproducirSonido('click'); cerrarModal('manifestoModal')">CERRAR / CLOSE</button>
+            <button class="close-btn-modal" style="border-color:var(--gold); color:var(--gold);" onclick="cerrarModal('manifestoModal')">CERRAR / CLOSE</button>
         </div>
     </div>
 
     <div id="requestModal" class="ts-modal">
         <div class="modal-card request-card">
-            <h2 class="request-title" id="lbl-req-title">SOLICITUD DE ACCESO</h2>
+            <h2 class="request-title" id="lbl-req-title" style="color:var(--accent-blue); margin-bottom:20px;">SOLICITUD DE ACCESO</h2>
             
-            <form id="accessForm" name="solicitud-acceso" method="POST" data-netlify="true" netlify>
+            <form id="accessForm" name="solicitud-acceso" method="POST" data-netlify="true">
                 <input type="hidden" name="form-name" value="solicitud-acceso">
-                <input type="hidden" name="subject" value="🔔 Nueva Solicitud de Acceso - LOBBY TSX">
+                <input type="hidden" name="subject" value="🔔 Nueva Solicitud TSX">
                 
                 <div class="form-group">
                     <label class="form-label" id="lbl-name">Nombre / Alias</label>
-                    <input type="text" name="nombre" class="form-input" placeholder="..." required>
+                    <input type="text" name="nombre" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" id="lbl-email">Contacto</label>
-                    <input type="email" name="email" class="form-input" placeholder="@..." required>
+                    <input type="email" name="email" class="form-input" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" id="lbl-reason">Propósito</label>
-                    <textarea name="motivo" class="form-textarea" placeholder="..." required></textarea>
+                    <textarea name="motivo" class="form-textarea" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn" id="btn-send">ENVIAR TRANSMISIÓN</button>
             </form>
 
-            <button class="close-btn-modal blue" onclick="reproducirSonido('click'); cerrarModal('requestModal')" style="margin-top:20px;">CANCELAR</button>
+            <button class="close-btn-modal" style="border-color:var(--accent-blue); color:var(--accent-blue); margin-top:20px;" onclick="cerrarModal('requestModal')">CANCELAR</button>
         </div>
     </div>
 
@@ -234,118 +223,111 @@
         <div class="modal-card nuclear-card">
             <div class="nuclear-symbol">☢️</div>
             <h2 style="color:red; letter-spacing:5px;">WARNING</h2>
-            <p class="nuclear-text">LA BASE DE DATOS DE VIRUS<br>HA SIDO ACTUALIZADA</p>
-            <p style="color:#fff;">SISTEMA COMPROMETIDO - NIVEL OMEGA</p>
-            <button class="close-btn-modal red" onclick="detenerNuclear()">DESACTIVAR PROTOCOLO</button>
+            <p style="color:#fff; margin:20px 0;">SISTEMA COMPROMETIDO<br>NIVEL OMEGA</p>
+            <button class="close-btn-modal" style="border-color:red; color:red;" onclick="detenerNuclear()">DESACTIVAR</button>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURACIÓN ---
-        const colors = ['#00c6ff', '#d4af37', '#bc13fe', '#ffffff']; 
-        const secretCode = "OMEGA"; 
-        let inputBuffer = "";
-
-        // --- 2. SISTEMA DE AUDIO ---
-        function reproducirSonido(id) {
+        // --- 1. CONFIGURACIÓN Y AUDIO ---
+        function playSound(id) {
             const audio = document.getElementById('sfx-' + id);
-            if(audio) {
-                audio.currentTime = 0;
-                audio.play().catch(e => console.log("Audio no disponible aún"));
-            }
+            if(audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
         }
 
-        // --- 3. EASTER EGG NUCLEAR ---
-        document.addEventListener('keyup', (e) => {
-            inputBuffer += e.key.toUpperCase();
-            if (inputBuffer.length > secretCode.length) { inputBuffer = inputBuffer.slice(-secretCode.length); }
-            if (inputBuffer === secretCode) { activarNuclear(); inputBuffer = ""; }
-        });
-
-        function activarNuclear() {
-            document.body.classList.add('nuclear-active');
-            reproducirSonido('virus');
-            abrirModal('nuclearModal');
-        }
-
-        function detenerNuclear() {
-            document.body.classList.remove('nuclear-active');
-            const audio = document.getElementById('sfx-virus');
-            if(audio) { audio.pause(); audio.currentTime = 0; }
-            cerrarModal('nuclearModal');
-        }
-
-        // --- 4. TORNADO ---
-        function invocarTornado(event, modalId) {
-            reproducirSonido('tornado');
+        // --- 2. ACCIONES (TORNADO Y MODALES) ---
+        function triggerAction(element, modalId) {
+            playSound('tornado');
+            // Crear Tornado
             const container = document.getElementById('particle-container');
-            const btnRect = event.target.getBoundingClientRect();
-            
-            const startX = btnRect.left + btnRect.width / 2;
-            const startY = btnRect.top + btnRect.height / 2;
+            const rect = element.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
             const endX = window.innerWidth / 2;
             const endY = window.innerHeight / 2;
+            const colors = ['#00c6ff', '#d4af37', '#bc13fe'];
 
-            for (let i = 0; i < 100; i++) { crearParticula(container, startX, startY, endX, endY, i); }
-            setTimeout(() => { abrirModal(modalId); }, 2100); 
+            for (let i = 0; i < 60; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                p.style.left = startX + 'px'; p.style.top = startY + 'px';
+                container.appendChild(p);
+
+                // Animación simple y segura
+                const anim = p.animate([
+                    { transform: 'translate(0,0) scale(0)', opacity: 0 },
+                    { transform: `translate(${(endX-startX)*0.5 + (Math.random()-0.5)*200}px, ${(endY-startY)*0.5 + (Math.random()-0.5)*200}px) scale(1.5)`, opacity: 1, offset: 0.3 },
+                    { transform: `translate(${endX-startX}px, ${endY-startY}px) scale(0)`, opacity: 0 }
+                ], { duration: 1500 + Math.random()*500, easing: 'ease-out' });
+                
+                anim.onfinish = () => p.remove();
+            }
+
+            // Abrir modal después de 1.2 segundos
+            setTimeout(() => {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'flex';
+                // Pequeño delay para permitir transición CSS
+                setTimeout(() => modal.classList.add('open'), 10);
+            }, 1200);
         }
 
-        function crearParticula(container, x, y, targetX, targetY, index) {
-            const p = document.createElement('div');
-            p.classList.add('particle');
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            p.style.backgroundColor = color; p.style.color = color;
-            p.style.left = x + 'px'; p.style.top = y + 'px';
-            container.appendChild(p);
-            const duration = 2000 + Math.random() * 500; const spread = 500;
-            const animation = p.animate([
-                { transform: `translate(0, 0) scale(0)`, opacity: 0 },
-                { transform: `translate(${(targetX - x) * 0.2 + (Math.random()-0.5)*spread}px, ${(targetY - y) * 0.2 + (Math.random()-0.5)*spread}px) scale(1)`, opacity: 1, offset: 0.2 },
-                { transform: `translate(${(targetX - x)}px, ${(targetY - y)}px) scale(0.5)`, opacity: 1, offset: 0.9 },
-                { transform: `translate(${targetX - x}px, ${targetY - y}px) scale(0)`, opacity: 0 }
-            ], { duration: duration, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' });
-            animation.onfinish = () => p.remove();
-        }
-
-        // --- 5. MODALES ---
-        function abrirModal(id) {
-            const modal = document.getElementById(id);
-            modal.style.display = 'flex'; void modal.offsetWidth; modal.classList.add('open');
-        }
         function cerrarModal(id) {
+            playSound('click');
             const modal = document.getElementById(id);
             modal.classList.remove('open');
-            setTimeout(() => { modal.style.display = 'none'; }, 600);
+            setTimeout(() => { modal.style.display = 'none'; }, 500);
         }
 
-        // --- 6. ENVÍO SILENCIOSO (AJAX) - SIN REDIRECT ---
+        // --- 3. SISTEMA DE IDIOMAS (TEXTOS SEGUROS) ---
+        // Usamos comillas invertidas (backticks) para textos largos para evitar errores de salto de línea
+        const db = {
+            es: { 
+                reqBtn: "♠️ SOLICITAR ACCESO", tagline: "The Solitary Xploration", auth: "// AUTENTICACIÓN NEXUS //", connect: "Conectar", 
+                aboutBtn: "ℹ️ SOBRE TSXPLORATION", 
+                aboutDesc: `Fundado por **Ulises Jimenez**. Una visión que nació en 2010.\n\nCada ser humano posee una capacidad única. Si en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable.\n\nLa tecnología actual no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto.`,
+                reqTitle: "SOLICITUD DE ACCESO", name: "Nombre / Alias", email: "Contacto", reason: "Propósito", send: "ENVIAR TRANSMISIÓN", sent: "SOLICITUD ENVIADA." 
+            },
+            en: { 
+                reqBtn: "♠️ REQUEST ACCESS", tagline: "The Solitary Xploration", auth: "// NEXUS AUTH //", connect: "Connect", 
+                aboutBtn: "ℹ️ ABOUT TSXPLORATION", 
+                aboutDesc: `Founded by **Ulises Jimenez**. A vision born in 2010.\n\nEvery human possesses a unique capacity. If in your thoughts you can transform chocolate into an apple, you prove that reality is malleable.\n\nCurrent technology is the sum of thousands of minds dreaming together.`,
+                reqTitle: "ACCESS REQUEST", name: "Name / Alias", email: "Contact", reason: "Purpose", send: "TRANSMIT DATA", sent: "REQUEST SENT." 
+            },
+            zh: { reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", aboutDesc: `由 **Ulises Jimenez** 创立。\n\n每个人都有独特的能力。如果你能在思想中把巧克力变成苹果，你就证明了现实是可塑的。`, reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" },
+            hi: { reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", aboutDesc: `**Ulises Jimenez** द्वारा स्थापित।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो वास्तविकता निंदनीय है।`, reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" },
+            fr: { reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", aboutDesc: `Fondé par **Ulises Jimenez**.\n\nSi vous pouvez transformer du chocolat en pomme par la pensée, la réalité est malléable.`, reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" }
+        };
+
+        function setLanguage(lang) {
+            playSound('click');
+            localStorage.setItem('tsx_lang', lang);
+            const t = db[lang];
+            
+            document.getElementById('btn-request').innerText = t.reqBtn;
+            document.getElementById('txt-tagline').innerText = t.tagline;
+            document.getElementById('txt-auth').innerText = t.auth;
+            document.getElementById('btn-connect').innerText = t.connect;
+            document.getElementById('btn-about').innerText = t.aboutBtn;
+            document.getElementById('txt-about-desc').innerText = t.aboutDesc;
+            document.getElementById('lbl-req-title').innerText = t.reqTitle;
+            document.getElementById('lbl-name').innerText = t.name;
+            document.getElementById('lbl-email').innerText = t.email;
+            document.getElementById('lbl-reason').innerText = t.reason;
+            document.getElementById('btn-send').innerText = t.send;
+            
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+lang).classList.add('active');
+        }
+        
+        // Iniciar idioma guardado o español por defecto
+        setLanguage(localStorage.getItem('tsx_lang') || 'es');
+
+        // --- 4. LÓGICA DE ENVÍO (AJAX) ---
         const form = document.getElementById('accessForm');
         form.addEventListener('submit', (e) => {
-            e.preventDefault(); // 1. Detenemos el envío normal
-            reproducirSonido('click');
-            
+            e.preventDefault();
+            playSound('click');
             const btn = document.getElementById('btn-send');
-            const t = translations[localStorage.getItem('tsx_lang') || 'es'];
-
-            btn.innerText = t.sending; // "ENVIANDO..."
-            btn.style.opacity = "0.7";
-            btn.disabled = true;
-
-            const myFormData = new FormData(e.target);
-
-            // 2. Enviamos los datos con FETCH
-            fetch('/', {
-                method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(myFormData).toString()
-            })
-            .then(() => {
-                // 3. ÉXITO (Sin recargar la página)
-                const successHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; animation: fadeInUp 0.5s;">
-                        <div style="font-size: 4rem; color: #00ff88; text-shadow: 0 0 20px #00ff88;">✔</div>
-                        <h3 style="color: white; margin-top: 10px;">${t.sentMsg}</h3>
-                        <p style="color: #aaa; font-size: 0.8rem; margin-top: 5px;">ULIX ha recibido tu señal.</p>
-                    </div>
-                `;
-                form.innerHTML = successHTML; // 
+          
