@@ -268,23 +268,35 @@
             }
         }
 
-        // --- 3. IDIOMAS ---
+                // --- 3. IDIOMAS (VERSIÓN EXTENDIDA & CORREGIDA) ---
         const db = {
             es: { 
                 reqBtn: "♠️ SOLICITAR ACCESO", tagline: "The Solitary Xploration", auth: "// AUTENTICACIÓN NEXUS //", connect: "Conectar", 
                 aboutBtn: "ℹ️ SOBRE TSXPLORATION", 
-                aboutDesc: "Fundado por **Ulises Jimenez**. Una visión que nació en 2010.\n\nCada ser humano posee una capacidad única. Si en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable.\n\nLa tecnología actual no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto.",
+                aboutDesc: "Fundado por **Ulises Jimenez**. Una visión que nació en 2010 y evolucionó hace 9 años para convertirse en la insignia TS.\n\nCada ser humano posee una capacidad única, a menudo contenida por los muros del conformismo. TSXPLORATION es una reflexión sobre el universo infinito que habita en la mente.\n\nSi en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable. Al derribar las barreras mentales, ese poder creativo trasciende al mundo físico.\n\nLa tecnología actual es la prueba: no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto. Cuando desbloqueas tu propia pieza del rompecabezas, no solo cambias tú; impulsas la evolución de todos.",
                 reqTitle: "SOLICITUD DE ACCESO", name: "Nombre / Alias", email: "Contacto", reason: "Propósito", send: "ENVIAR TRANSMISIÓN", sent: "SOLICITUD ENVIADA." 
             },
             en: { 
                 reqBtn: "♠️ REQUEST ACCESS", tagline: "The Solitary Xploration", auth: "// NEXUS AUTH //", connect: "Connect", 
                 aboutBtn: "ℹ️ ABOUT TSXPLORATION", 
-                aboutDesc: "Founded by **Ulises Jimenez**. A vision born in 2010.\n\nEvery human possesses a unique capacity. If in your thoughts you can transform chocolate into an apple, you prove that reality is malleable.\n\nCurrent technology is the sum of thousands of minds dreaming together.",
+                aboutDesc: "Founded by **Ulises Jimenez**. A vision born in 2010 that evolved 9 years ago to become the TS insignia.\n\nEvery human possesses a unique capacity, often contained by the walls of conformity. TSXPLORATION is a reflection on the infinite universe that inhabits the mind.\n\nIf in your thoughts you can transform chocolate into an apple, you prove that reality is malleable. By breaking down mental barriers, that creative power transcends into the physical world.\n\nCurrent technology is the proof: it is not the work of a single person, but the sum of thousands of minds dreaming together. When you unlock your own piece of the puzzle, you don't just change yourself; you drive the evolution of everyone.",
                 reqTitle: "ACCESS REQUEST", name: "Name / Alias", email: "Contact", reason: "Purpose", send: "TRANSMIT DATA", sent: "REQUEST SENT." 
             },
-            zh: { reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", aboutDesc: "由 **Ulises Jimenez** 创立。\n\n每个人都有独特的能力。如果你能在思想中把巧克力变成苹果，你就证明了现实是可塑的。", reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" },
-            hi: { reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", aboutDesc: "**Ulises Jimenez** द्वारा स्थापित।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो वास्तविकता निंदनीय है।", reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" },
-            fr: { reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", aboutDesc: "Fondé par **Ulises Jimenez**.\n\nSi vous pouvez transformer du chocolat en pomme par la pensée, la réalité est malléable.", reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" }
+            zh: { 
+                reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", 
+                aboutDesc: "由 **Ulises Jimenez** 创立。这一愿景诞生于 2010 年，并在 9 年前演变为 TS 徽章。\n\n每个人都拥有一种独特的能力，往往被墨守成规的墙壁所束缚。TSXPLORATION 是对栖息在心中的无限宇宙的思考。\n\n如果在你的思想中，你能把巧克力变成苹果，这就证明现实是可塑的。通过打破精神障碍，这种创造力将超越到物理世界。\n\n现代科技就是证据：它不是一个人的作品，而是成千上万个思想共同梦想的总和。当你解开属于你自己的那块拼图时，你不仅改变了自己，也推动了所有人的进化。", 
+                reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" 
+            },
+            hi: { 
+                reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", 
+                aboutDesc: "**Ulises Jimenez** द्वारा स्थापित। एक दृष्टि जो 2010 में पैदा हुई और 9 साल पहले TS प्रतीक बनने के लिए विकसित हुई।\n\nप्रत्येक मनुष्य के पास एक अद्वितीय क्षमता होती है, जो अक्सर अनुरूपता की दीवारों से घिरी होती है। TSXPLORATION मन में रहने वाले अनंत ब्रह्मांड पर एक प्रतिबिंब है।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो आप साबित करते हैं कि वास्तविकता निंदनीय है। मानसिक बाधाओं को तोड़कर, वह रचनात्मक शक्ति भौतिक दुनिया में पहुंच जाती है।\n\nवर्तमान तकनीक इसका प्रमाण है: यह किसी एक व्यक्ति का काम नहीं है, बल्कि एक साथ सपने देखने वाले हजारों दिमागों का योग है। जब आप पहेली के अपने टुकड़े को अनलॉक करते हैं, तो आप न केवल खुद को बदलते हैं; आप सभी के विकास को आगे बढ़ाते हैं。", 
+                reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" 
+            },
+            fr: { 
+                reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", 
+                aboutDesc: "Fondé par **Ulises Jimenez**. Une vision née en 2010 qui a évolué il y a 9 ans pour devenir l'insigne TS.\n\nChaque être humain possède une capacité unique, souvent contenue par les murs du conformisme. TSXPLORATION est une réflexion sur l'univers infini qui habite l'esprit.\n\nSi dans vos pensées vous pouvez transformer du chocolat en une pomme, vous prouvez que la réalité est malléable. En brisant les barrières mentales, ce pouvoir créatif transcende le monde physique.\n\nLa technologie actuelle en est la preuve : ce n'est pas l'œuvre d'une seule personne, mais la somme de milliers d'esprits rêvant ensemble. Lorsque vous déverrouillez votre propre pièce du puzzle, vous ne changez pas seulement vous-même ; vous propulsez l'évolution de tous.", 
+                reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" 
+            }
         };
 
         function setLanguage(lang) {
@@ -338,7 +350,7 @@
             });
         });
 
-         // --- 5. SISTEMA DE LOGIN ---
+        // --- 5. SISTEMA DE LOGIN ---
         function verificarAcceso() {
             playSound('click');
             const val = document.getElementById('passInput').value;
