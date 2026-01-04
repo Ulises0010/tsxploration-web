@@ -27,10 +27,10 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             color: #fff;
-            transition: background 0.2s; /* Para el efecto nuclear */
+            transition: background 0.2s; 
         }
 
-        /* --- 2. EFECTOS ESPECIALES (TORNADO & NUCLEAR) --- */
+        /* --- 2. EFECTOS ESPECIALES --- */
         #particle-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9999; overflow: hidden;
@@ -40,28 +40,14 @@
             opacity: 0; box-shadow: 0 0 20px currentColor;
         }
 
-        /* Clase para el MODO NUCLEAR (Alarma) */
-        body.nuclear-active {
-            animation: nuclearShake 0.5s infinite, nuclearFlash 1s infinite;
-        }
+        body.nuclear-active { animation: nuclearShake 0.5s infinite, nuclearFlash 1s infinite; }
 
         @keyframes nuclearShake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
             50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-        @keyframes nuclearFlash {
-            0%, 100% { background: #000; }
-            50% { background: #500000; } /* Rojo oscuro */
-        }
+        @keyframes nuclearFlash { 0%, 100% { background: #000; } 50% { background: #500000; } }
 
         /* --- 3. UI ELEMENTS --- */
         .access-btn-container { position: absolute; top: 20px; left: 20px; z-index: 100; }
@@ -117,12 +103,11 @@
         .info-trigger {
             position: absolute; bottom: 30px; cursor: pointer;
             color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 2px;
-            transition: 0.3s; text-transform: uppercase; border-bottom: 1px solid transparent;
-            z-index: 100; 
+            transition: 0.3s; text-transform: uppercase; border-bottom: 1px solid transparent; z-index: 100; 
         }
         .info-trigger:hover { color: var(--gold); border-color: var(--gold); }
 
-        /* --- 4. MODALES (SISTEMA DE MATERIALIZACIÓN) --- */
+        /* --- 4. MODALES --- */
         .ts-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 200; backdrop-filter: blur(15px);
@@ -134,15 +119,11 @@
             background: #0a0a0a; border: 1px solid #333; width: 90%; max-width: 600px;
             padding: 40px; border-radius: 20px; text-align: center; position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            /* ESTADO INICIAL: Luz pura */
             opacity: 0; filter: brightness(500%) blur(30px); transform: scale(0.8);
-            /* Transición de enfriamiento */
             transition: opacity 0.2s ease, filter 1s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        /* ESTADO FINAL: Materia sólida */
         .ts-modal.open .modal-card { opacity: 1; filter: brightness(100%) blur(0px); transform: scale(1); }
 
-        /* Estilos de Tarjetas */
         .manifesto-card { border-color: var(--gold); box-shadow: 0 0 60px rgba(212, 175, 55, 0.3); }
         .manifesto-title { color: var(--gold); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .manifesto-text { color: #ccc; line-height: 1.8; font-size: 0.95rem; margin-bottom: 30px; text-align: justify; white-space: pre-line; max-height: 60vh; overflow-y: auto; }
@@ -150,14 +131,9 @@
         .request-card { border-color: var(--accent-blue); box-shadow: 0 0 60px rgba(0, 198, 255, 0.3); }
         .request-title { color: var(--accent-blue); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        /* TARJETA NUCLEAR (NUEVA) */
-        .nuclear-card { 
-            border: 2px solid var(--nuclear-red); background: #1a0000;
-            box-shadow: 0 0 100px var(--nuclear-red); 
-        }
+        .nuclear-card { border: 2px solid var(--nuclear-red); background: #1a0000; box-shadow: 0 0 100px var(--nuclear-red); }
         .nuclear-symbol { font-size: 4rem; color: var(--nuclear-red); animation: pulseNuclear 0.5s infinite alternate; }
         .nuclear-text { color: var(--nuclear-red); font-weight: bold; letter-spacing: 2px; margin: 20px 0; font-size: 1.2rem; text-transform: uppercase;}
-        
         @keyframes pulseNuclear { from { opacity: 0.5; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
 
         /* Formulario */
@@ -230,21 +206,26 @@
     <div id="requestModal" class="ts-modal">
         <div class="modal-card request-card">
             <h2 class="request-title" id="lbl-req-title">SOLICITUD DE ACCESO</h2>
-            <div id="requestFormContent">
+            
+            <form id="accessForm" name="solicitud-acceso" method="POST" data-netlify="true" netlify>
+                <input type="hidden" name="form-name" value="solicitud-acceso">
+                <input type="hidden" name="subject" value="🔔 Nueva Solicitud de Acceso - LOBBY TSX">
+                
                 <div class="form-group">
                     <label class="form-label" id="lbl-name">Nombre / Alias</label>
-                    <input type="text" class="form-input" placeholder="...">
+                    <input type="text" name="nombre" class="form-input" placeholder="..." required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" id="lbl-email">Contacto</label>
-                    <input type="email" class="form-input" placeholder="@...">
+                    <input type="email" name="email" class="form-input" placeholder="@..." required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" id="lbl-reason">Propósito</label>
-                    <textarea class="form-textarea" placeholder="..."></textarea>
+                    <textarea name="motivo" class="form-textarea" placeholder="..." required></textarea>
                 </div>
-                <button class="submit-btn" id="btn-send" onclick="reproducirSonido('click'); simularEnvio()">ENVIAR TRANSMISIÓN</button>
-            </div>
+                <button type="submit" class="submit-btn" id="btn-send">ENVIAR TRANSMISIÓN</button>
+            </form>
+
             <button class="close-btn-modal blue" onclick="reproducirSonido('click'); cerrarModal('requestModal')" style="margin-top:20px;">CANCELAR</button>
         </div>
     </div>
@@ -262,7 +243,7 @@
     <script>
         // --- 1. CONFIGURACIÓN ---
         const colors = ['#00c6ff', '#d4af37', '#bc13fe', '#ffffff']; 
-        const secretCode = "OMEGA"; // La palabra mágica
+        const secretCode = "OMEGA"; 
         let inputBuffer = "";
 
         // --- 2. SISTEMA DE AUDIO ---
@@ -276,22 +257,15 @@
 
         // --- 3. EASTER EGG NUCLEAR ---
         document.addEventListener('keyup', (e) => {
-            // Guardamos las últimas letras escritas
             inputBuffer += e.key.toUpperCase();
-            if (inputBuffer.length > secretCode.length) {
-                inputBuffer = inputBuffer.slice(-secretCode.length);
-            }
-            // Verificamos si escribió OMEGA
-            if (inputBuffer === secretCode) {
-                activarNuclear();
-                inputBuffer = ""; // Reset
-            }
+            if (inputBuffer.length > secretCode.length) { inputBuffer = inputBuffer.slice(-secretCode.length); }
+            if (inputBuffer === secretCode) { activarNuclear(); inputBuffer = ""; }
         });
 
         function activarNuclear() {
-            document.body.classList.add('nuclear-active'); // Temblor y flash
-            reproducirSonido('virus'); // Sirena
-            abrirModal('nuclearModal'); // Ventana de alerta
+            document.body.classList.add('nuclear-active');
+            reproducirSonido('virus');
+            abrirModal('nuclearModal');
         }
 
         function detenerNuclear() {
@@ -301,7 +275,7 @@
             cerrarModal('nuclearModal');
         }
 
-        // --- 4. TORNADO DE PARTÍCULAS ---
+        // --- 4. TORNADO ---
         function invocarTornado(event, modalId) {
             reproducirSonido('tornado');
             const container = document.getElementById('particle-container');
@@ -312,10 +286,7 @@
             const endX = window.innerWidth / 2;
             const endY = window.innerHeight / 2;
 
-            for (let i = 0; i < 100; i++) {
-                crearParticula(container, startX, startY, endX, endY, i);
-            }
-
+            for (let i = 0; i < 100; i++) { crearParticula(container, startX, startY, endX, endY, i); }
             setTimeout(() => { abrirModal(modalId); }, 2100); 
         }
 
@@ -323,91 +294,58 @@
             const p = document.createElement('div');
             p.classList.add('particle');
             const color = colors[Math.floor(Math.random() * colors.length)];
-            p.style.backgroundColor = color;
-            p.style.color = color;
-            p.style.left = x + 'px';
-            p.style.top = y + 'px';
+            p.style.backgroundColor = color; p.style.color = color;
+            p.style.left = x + 'px'; p.style.top = y + 'px';
             container.appendChild(p);
-
-            const duration = 2000 + Math.random() * 500; 
-            const spread = 500;
-
+            const duration = 2000 + Math.random() * 500; const spread = 500;
             const animation = p.animate([
                 { transform: `translate(0, 0) scale(0)`, opacity: 0 },
                 { transform: `translate(${(targetX - x) * 0.2 + (Math.random()-0.5)*spread}px, ${(targetY - y) * 0.2 + (Math.random()-0.5)*spread}px) scale(1)`, opacity: 1, offset: 0.2 },
                 { transform: `translate(${(targetX - x)}px, ${(targetY - y)}px) scale(0.5)`, opacity: 1, offset: 0.9 },
                 { transform: `translate(${targetX - x}px, ${targetY - y}px) scale(0)`, opacity: 0 }
             ], { duration: duration, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' });
-
             animation.onfinish = () => p.remove();
         }
 
-        // --- 5. SISTEMA MODAL (MATERIALIZACIÓN) ---
+        // --- 5. MODALES ---
         function abrirModal(id) {
             const modal = document.getElementById(id);
-            modal.style.display = 'flex';
-            void modal.offsetWidth; 
-            modal.classList.add('open');
+            modal.style.display = 'flex'; void modal.offsetWidth; modal.classList.add('open');
         }
-
         function cerrarModal(id) {
             const modal = document.getElementById(id);
             modal.classList.remove('open');
             setTimeout(() => { modal.style.display = 'none'; }, 600);
         }
 
-        // --- 6. TRADUCCIONES ---
-        const translations = {
-            es: { requestBtn: "♠️ SOLICITAR ACCESO", reqTitle: "SOLICITUD DE ACCESO", lblName: "Nombre / Alias", lblEmail: "Email / Contacto", lblReason: "Propósito de Ingreso", btnSend: "ENVIAR TRANSMISIÓN", tagline: "The Solitary Xploration", auth: "// AUTENTICACIÓN NEXUS //", btn: "CONECTAR", placeholder: "CÓDIGO", error: "Acceso Denegado", opMsg: "ACCEDIENDO A OPERACIONES...", artMsg: "ACCEDIENDO A ESTUDIO...", aboutBtn: "ℹ️ SOBRE TSXPLORATION", aboutTitle: "NUESTRA IDENTIDAD", sentMsg: "SOLICITUD ENCRIPTADA Y ENVIADA.", sending: "ENVIANDO...", aboutDesc: "Fundado por **Ulises Jimenez**. Una visión que nació en 2010 y evolucionó hace 9 años para convertirse en la insignia TS.\n\nCada ser humano posee una capacidad única, a menudo contenida por los muros del conformismo. TSXPLORATION es una reflexión sobre el universo infinito que habita en la mente.\n\nSi en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable. Al derribar las barreras mentales, ese poder creativo trasciende al mundo físico.\n\nLa tecnología actual es la prueba: no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto. Cuando desbloqueas tu propia pieza del rompecabezas, no solo cambias tú; impulsas la evolución de todos." },
-            en: { requestBtn: "♠️ REQUEST ACCESS", reqTitle: "ACCESS REQUEST", lblName: "Name / Alias", lblEmail: "Email / Contact", lblReason: "Purpose of Entry", btnSend: "TRANSMIT DATA", tagline: "The Solitary Xploration", auth: "// AUTHENTICATION NEXUS //", btn: "CONNECT", placeholder: "PASSCODE", error: "Access Denied", opMsg: "ACCESSING OPERATIONS...", artMsg: "ACCESSING STUDIO...", aboutBtn: "ℹ️ ABOUT TSXPLORATION", aboutTitle: "OUR IDENTITY", sentMsg: "REQUEST ENCRYPTED AND SENT.", sending: "SENDING...", aboutDesc: "Founded by **Ulises Jimenez**. A vision born in 2010 that evolved 9 years ago to become the TS insignia.\n\nEvery human possesses a unique capacity, often contained by the walls of conformity. TSXPLORATION is a reflection on the infinite universe that inhabits the mind.\n\nIf in your thoughts you can transform chocolate into an apple, you prove that reality is malleable. By breaking down mental barriers, that creative power transcends into the physical world.\n\nCurrent technology is the proof: it is not the work of a single person, but the sum of thousands of minds dreaming together. When you unlock your own piece of the puzzle, you don't just change yourself; you drive the evolution of everyone." },
-            zh: { requestBtn: "♠️ 申请访问", reqTitle: "访问申请", lblName: "姓名 / 代号", lblEmail: "电子邮件", lblReason: "目的", btnSend: "发送数据", tagline: "孤独的探索", auth: "// 核心身份验证 //", btn: "连接", placeholder: "密码", error: "拒绝访问", opMsg: "正在访问操作中心...", artMsg: "正在进入工作室...", aboutBtn: "ℹ️ 关于 TSXPLORATION", aboutTitle: "我们的身份", sentMsg: "请求已加密并发送。", sending: "发送中...", aboutDesc: "由 **Ulises Jimenez** 创立。愿景诞生于 2010 年，并在 9 年前演变为 TS 徽章。\n\n每个人都拥有一种独特的能力，往往被墨守成规的墙壁所限制。TSXPLORATION 是对心灵无限宇宙的思考。\n\n如果在你的思想中，你能把巧克力变成苹果，这就证明现实是可塑的。通过打破精神障碍，这种创造力将超越到物质世界。\n\n现代科技就是证据：它不是一个人的作品，而是成千上万个思想共同梦想的总和。当你解开属于你自己的那块拼图时，你不仅改变了自己，也推动了所有人的进化。" },
-            hi: { requestBtn: "♠️ पहुँच का अनुरोध करें", reqTitle: "प्रवेश अनुरोध", lblName: "नाम / उपनाम", lblEmail: "ईमेल", lblReason: "उद्देश्य", btnSend: "डेटा भेजें", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस प्रमाणीकरण //", btn: "कनेक्ट करें", placeholder: "पासकोड", error: "प्रवेश अस्वीकृत", opMsg: "ऑपरेशंस एक्सेस कर रहा है...", artMsg: "स्टूडियो एक्सेस कर रहा है...", aboutBtn: "ℹ️ TSXPLORATION के बारे में", aboutTitle: "हमारी पहचान", sentMsg: "अनुरोध एन्क्रिप्टेड और भेजा गया।", sending: "भेज रहा है...", aboutDesc: "**Ulises Jimenez** द्वारा स्थापित। एक दृष्टि जो 2010 में पैदा हुई और 9 साल पहले TS प्रतीक बनने के लिए विकसित हुई।\n\nप्रत्येक मनुष्य के पास एक अद्वितीय क्षमता होती है, जो अक्सर अनुरूपता की दीवारों से घिरी होती है। TSXPLORATION मन में रहने वाले अनंत ब्रह्मांड पर एक प्रतिबिंब है।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो आप साबित करते हैं कि वास्तविकता निंदनीय है। मानसिक बाधाओं को तोड़कर, वह रचनात्मक शक्ति भौतिक दुनिया में पहुंच जाती है।\n\nवर्तमान तकनीक इसका प्रमाण है: यह किसी एक व्यक्ति का काम नहीं है, बल्कि एक साथ सपने देखने वाले हजारों दिमागों का योग है। जब आप पहेली के अपने टुकड़े को अनलॉक करते हैं, तो आप न केवल खुद को बदलते हैं; आप सभी के विकास को आगे बढ़ाते हैं。" },
-            fr: { requestBtn: "♠️ DEMANDER L'ACCÈS", reqTitle: "DEMANDE D'ACCÈS", lblName: "Nom / Alias", lblEmail: "Email", lblReason: "Objectif", btnSend: "TRANSMETTRE", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION NEXUS //", btn: "SE CONNECTER", placeholder: "CODE", error: "Accès Refusé", opMsg: "ACCÈS AUX OPÉRATIONS...", artMsg: "ACCÈS AU STUDIO...", aboutBtn: "ℹ️ À PROPOS DE TSXPLORATION", aboutTitle: "NOTRE IDENTITÉ", sentMsg: "DEMANDE CRYPTÉE ET ENVOYÉE.", sending: "ENVOI...", aboutDesc: "Fondé par **Ulises Jimenez**. Une vision née en 2010 qui a évolué il y a 9 ans pour devenir l'insigne TS.\n\nChaque être humain possède une capacité unique, souvent contenue par les murs du conformisme. TSXPLORATION est une réflexion sur l'univers infini qui habite l'esprit.\n\nSi dans vos pensées vous pouvez transformer du chocolat en pomme, vous prouvez que la réalité est malléable. En brisant les barrières mentales, ce pouvoir créatif transcende le monde physique.\n\nLa technologie actuelle en est la preuve : ce n'est pas l'œuvre d'une seule personne, mais la somme de milliers d'esprits rêvant ensemble. Lorsque vous déverrouillez votre propre pièce du puzzle, vous ne changez pas seulement vous-même ; vous propulsez l'évolution de tous." }
-        };
-
-        function simularEnvio() {
+        // --- 6. ENVÍO SILENCIOSO (AJAX) - SIN REDIRECT ---
+        const form = document.getElementById('accessForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // 1. Detenemos el envío normal
+            reproducirSonido('click');
+            
             const btn = document.getElementById('btn-send');
-            const formContent = document.getElementById('requestFormContent');
             const t = translations[localStorage.getItem('tsx_lang') || 'es'];
-            btn.innerText = t.sending; btn.style.opacity = "0.7";
-            setTimeout(() => { formContent.innerHTML = `<div style="color: var(--accent-blue); font-size: 3rem;">✔</div><p style="color: #fff; margin-top: 15px; font-weight: bold;">${t.sentMsg}</p>`; }, 1500);
-            setTimeout(() => { cerrarModal('requestModal'); setTimeout(() => location.reload(), 500); }, 4000);
-        }
 
-        function setLanguage(lang) {
-            const t = translations[lang];
-            document.getElementById('btn-request').innerText = t.requestBtn;
-            document.getElementById('txt-tagline').innerText = t.tagline;
-            document.getElementById('txt-auth').innerText = t.auth;
-            document.getElementById('btn-connect').innerText = t.btn;
-            document.getElementById('passInput').placeholder = t.placeholder;
-            document.getElementById('error').innerText = t.error;
-            document.getElementById('btn-about').innerText = t.aboutBtn;
-            document.getElementById('txt-about-title').innerText = t.aboutTitle;
-            document.getElementById('txt-about-desc').innerHTML = t.aboutDesc.replace(/\n/g, '<br>');
-            document.getElementById('lbl-req-title').innerText = t.reqTitle;
-            document.getElementById('lbl-name').innerText = t.lblName;
-            document.getElementById('lbl-email').innerText = t.lblEmail;
-            document.getElementById('lbl-reason').innerText = t.lblReason;
-            document.getElementById('btn-send').innerText = t.btnSend;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`btn-${lang}`).classList.add('active');
-            localStorage.setItem('tsx_lang', lang);
-        }
+            btn.innerText = t.sending; // "ENVIANDO..."
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
 
-        const savedLang = localStorage.getItem('tsx_lang') || 'es';
-        setLanguage(savedLang);
+            const myFormData = new FormData(e.target);
 
-        function verificarAcceso() {
-            const input = document.getElementById('passInput').value;
-            const btn = document.getElementById('btn-connect');
-            const t = translations[localStorage.getItem('tsx_lang') || 'es'];
-            if (input === "TSX2026") { btn.innerText = t.opMsg; setTimeout(() => { window.location.href = "operaciones.html"; }, 800); } 
-            else if (input === "TSX-ART") { btn.innerText = t.artMsg; setTimeout(() => { window.location.href = "proyectos.html"; }, 800); } 
-            else { document.getElementById('error').style.display = "block"; document.getElementById('passInput').style.borderColor = "#ff5b5b"; document.querySelector('.panel-glass').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 300 }); }
-        }
-        document.getElementById("passInput").addEventListener("keypress", (e) => { if(e.key==="Enter") verificarAcceso(); });
-    </script>
-
-</body>
-</html>
+            // 2. Enviamos los datos con FETCH
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(myFormData).toString()
+            })
+            .then(() => {
+                // 3. ÉXITO (Sin recargar la página)
+                const successHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; animation: fadeInUp 0.5s;">
+                        <div style="font-size: 4rem; color: #00ff88; text-shadow: 0 0 20px #00ff88;">✔</div>
+                        <h3 style="color: white; margin-top: 10px;">${t.sentMsg}</h3>
+                        <p style="color: #aaa; font-size: 0.8rem; margin-top: 5px;">ULIX ha recibido tu señal.</p>
+                    </div>
+                `;
+                form.innerHTML = successHTML; // 
