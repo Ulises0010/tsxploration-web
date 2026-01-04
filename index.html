@@ -29,24 +29,24 @@
             color: #fff;
         }
 
-        /* --- 2. EFECTOS ESPECIALES (FONDO) --- */
+        /* --- 2. FONDO --- */
         #particle-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Dejar pasar clics */
-            z-index: 1; /* Nivel bajo */
-            overflow: hidden;
+            pointer-events: none; z-index: 1; overflow: hidden;
         }
         .particle {
             position: absolute; width: 4px; height: 4px; border-radius: 50%;
             opacity: 0; box-shadow: 0 0 20px currentColor;
         }
 
+        /* EFECTO NUCLEAR */
         body.nuclear-active { animation: nuclearShake 0.5s infinite, nuclearFlash 1s infinite; }
         @keyframes nuclearShake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, 2px); } 100% { transform: translate(1px, -2px); } }
         @keyframes nuclearFlash { 0%, 100% { background: #000; } 50% { background: #500000; } }
 
-        /* --- 3. ELEMENTOS DE INTERFAZ (NIVEL SUPERIOR) --- */
-        .ui-layer { position: relative; z-index: 100; } /* Asegura que todo esto esté sobre las partículas */
+        /* --- 3. INTERFAZ (UI) --- */
+        /* Z-Index alto para asegurar que los botones funcionen */
+        .ui-layer { position: relative; z-index: 100; } 
 
         .access-btn-container { position: absolute; top: 20px; left: 20px; z-index: 200; }
         .access-btn {
@@ -56,7 +56,11 @@
             backdrop-filter: blur(5px); transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; gap: 5px;
         }
-        .access-btn:hover, .access-btn:active { color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 198, 255, 0.3); transform: scale(1.05); }
+        .access-btn:hover, .access-btn:active { 
+            color: #fff; border-color: var(--accent-blue); 
+            box-shadow: 0 0 15px rgba(0, 198, 255, 0.5); 
+            transform: scale(1.05); 
+        }
 
         .lang-bar {
             position: absolute; top: 20px; right: 20px; z-index: 200; display: flex; gap: 8px;
@@ -83,6 +87,7 @@
             padding: 50px 40px; border-radius: 24px; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
             width: 360px; text-align: center; animation: fadeInUp 1.5s ease-out 0.3s backwards; position: relative; z-index: 100;
         }
+        .input-label { display: block; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; color: rgba(255,255,255,0.5); font-weight: 600; }
         .input-code {
             width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px;
             color: white; text-align: center; letter-spacing: 6px; font-size: 1.3rem; font-weight: bold; outline: none; transition: 0.4s;
@@ -121,10 +126,12 @@
         .ts-modal.open .modal-card { opacity: 1; filter: brightness(100%) blur(0px); transform: scale(1); }
 
         .manifesto-card { border-color: var(--gold); box-shadow: 0 0 60px rgba(212, 175, 55, 0.3); }
+        .manifesto-title { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .manifesto-text { color: #ccc; line-height: 1.8; font-size: 0.95rem; margin-bottom: 30px; text-align: justify; white-space: pre-line; max-height: 60vh; overflow-y: auto; }
 
         .request-card { border-color: var(--accent-blue); box-shadow: 0 0 60px rgba(0, 198, 255, 0.3); }
-        
+        .request-title { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
         /* Formulario */
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-label { color: #888; font-size: 0.8rem; margin-left: 10px; margin-bottom: 5px; display: block; }
@@ -155,7 +162,7 @@
     <div id="particle-container"></div>
 
     <div class="access-btn-container">
-        <button class="access-btn" id="btn-request" onclick="triggerAction(this, 'requestModal')">
+        <button class="access-btn" id="btn-request" onclick="abrirModal('requestModal')">
             ♠️ SOLICITAR ACCESO
         </button>
     </div>
@@ -180,7 +187,7 @@
         <p id="error" class="error-msg">Acceso Denegado</p>
     </div>
 
-    <div class="info-trigger ui-layer" id="btn-about" onclick="triggerAction(this, 'manifestoModal')">
+    <div class="info-trigger ui-layer" id="btn-about" onclick="abrirModal('manifestoModal')">
         ℹ️ SOBRE TSXPLORATION
     </div>
 
@@ -229,75 +236,55 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURACIÓN Y AUDIO ---
+        // --- 1. AUDIO Y FUNCIONES BÁSICAS ---
         function playSound(id) {
             const audio = document.getElementById('sfx-' + id);
             if(audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
         }
 
-        // --- 2. ACCIONES (TORNADO Y MODALES) ---
-        function triggerAction(element, modalId) {
-            playSound('tornado');
-            // Crear Tornado
-            const container = document.getElementById('particle-container');
-            const rect = element.getBoundingClientRect();
-            const startX = rect.left + rect.width / 2;
-            const startY = rect.top + rect.height / 2;
-            const endX = window.innerWidth / 2;
-            const endY = window.innerHeight / 2;
-            const colors = ['#00c6ff', '#d4af37', '#bc13fe'];
-
-            for (let i = 0; i < 60; i++) {
-                const p = document.createElement('div');
-                p.classList.add('particle');
-                p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                p.style.left = startX + 'px'; p.style.top = startY + 'px';
-                container.appendChild(p);
-
-                // Animación simple y segura
-                const anim = p.animate([
-                    { transform: 'translate(0,0) scale(0)', opacity: 0 },
-                    { transform: `translate(${(endX-startX)*0.5 + (Math.random()-0.5)*200}px, ${(endY-startY)*0.5 + (Math.random()-0.5)*200}px) scale(1.5)`, opacity: 1, offset: 0.3 },
-                    { transform: `translate(${endX-startX}px, ${endY-startY}px) scale(0)`, opacity: 0 }
-                ], { duration: 1500 + Math.random()*500, easing: 'ease-out' });
-                
-                anim.onfinish = () => p.remove();
-            }
-
-            // Abrir modal después de 1.2 segundos
-            setTimeout(() => {
-                const modal = document.getElementById(modalId);
+        // --- 2. APERTURA DE MODALES (SIN TORNADO) ---
+        // Se ha simplificado para garantizar que funcione en móviles
+        function abrirModal(id) {
+            playSound('click'); // Sonido simple
+            
+            const modal = document.getElementById(id);
+            if(modal) {
                 modal.style.display = 'flex';
-                // Pequeño delay para permitir transición CSS
-                setTimeout(() => modal.classList.add('open'), 10);
-            }, 1200);
+                // Pequeño delay para permitir que el navegador procese el display:flex antes de la opacidad
+                setTimeout(() => {
+                    modal.classList.add('open');
+                }, 10);
+            } else {
+                console.error("No se encontró el modal: " + id);
+            }
         }
 
         function cerrarModal(id) {
             playSound('click');
             const modal = document.getElementById(id);
-            modal.classList.remove('open');
-            setTimeout(() => { modal.style.display = 'none'; }, 500);
+            if(modal) {
+                modal.classList.remove('open');
+                setTimeout(() => { modal.style.display = 'none'; }, 500);
+            }
         }
 
-        // --- 3. SISTEMA DE IDIOMAS (TEXTOS SEGUROS) ---
-        // Usamos comillas invertidas (backticks) para textos largos para evitar errores de salto de línea
+        // --- 3. IDIOMAS ---
         const db = {
             es: { 
                 reqBtn: "♠️ SOLICITAR ACCESO", tagline: "The Solitary Xploration", auth: "// AUTENTICACIÓN NEXUS //", connect: "Conectar", 
                 aboutBtn: "ℹ️ SOBRE TSXPLORATION", 
-                aboutDesc: `Fundado por **Ulises Jimenez**. Una visión que nació en 2010.\n\nCada ser humano posee una capacidad única. Si en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable.\n\nLa tecnología actual no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto.`,
+                aboutDesc: "Fundado por **Ulises Jimenez**. Una visión que nació en 2010.\n\nCada ser humano posee una capacidad única. Si en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable.\n\nLa tecnología actual no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto.",
                 reqTitle: "SOLICITUD DE ACCESO", name: "Nombre / Alias", email: "Contacto", reason: "Propósito", send: "ENVIAR TRANSMISIÓN", sent: "SOLICITUD ENVIADA." 
             },
             en: { 
                 reqBtn: "♠️ REQUEST ACCESS", tagline: "The Solitary Xploration", auth: "// NEXUS AUTH //", connect: "Connect", 
                 aboutBtn: "ℹ️ ABOUT TSXPLORATION", 
-                aboutDesc: `Founded by **Ulises Jimenez**. A vision born in 2010.\n\nEvery human possesses a unique capacity. If in your thoughts you can transform chocolate into an apple, you prove that reality is malleable.\n\nCurrent technology is the sum of thousands of minds dreaming together.`,
+                aboutDesc: "Founded by **Ulises Jimenez**. A vision born in 2010.\n\nEvery human possesses a unique capacity. If in your thoughts you can transform chocolate into an apple, you prove that reality is malleable.\n\nCurrent technology is the sum of thousands of minds dreaming together.",
                 reqTitle: "ACCESS REQUEST", name: "Name / Alias", email: "Contact", reason: "Purpose", send: "TRANSMIT DATA", sent: "REQUEST SENT." 
             },
-            zh: { reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", aboutDesc: `由 **Ulises Jimenez** 创立。\n\n每个人都有独特的能力。如果你能在思想中把巧克力变成苹果，你就证明了现实是可塑的。`, reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" },
-            hi: { reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", aboutDesc: `**Ulises Jimenez** द्वारा स्थापित।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो वास्तविकता निंदनीय है।`, reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" },
-            fr: { reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", aboutDesc: `Fondé par **Ulises Jimenez**.\n\nSi vous pouvez transformer du chocolat en pomme par la pensée, la réalité est malléable.`, reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" }
+            zh: { reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", aboutDesc: "由 **Ulises Jimenez** 创立。\n\n每个人都有独特的能力。如果你能在思想中把巧克力变成苹果，你就证明了现实是可塑的。", reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" },
+            hi: { reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", aboutDesc: "**Ulises Jimenez** द्वारा स्थापित।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो वास्तविकता निंदनीय है।", reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" },
+            fr: { reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", aboutDesc: "Fondé par **Ulises Jimenez**.\n\nSi vous pouvez transformer du chocolat en pomme par la pensée, la réalité est malléable.", reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" }
         };
 
         function setLanguage(lang) {
@@ -310,7 +297,9 @@
             document.getElementById('txt-auth').innerText = t.auth;
             document.getElementById('btn-connect').innerText = t.connect;
             document.getElementById('btn-about').innerText = t.aboutBtn;
+            // Usamos innerText para evitar inyección de HTML no deseado y saltos de línea simples
             document.getElementById('txt-about-desc').innerText = t.aboutDesc;
+            
             document.getElementById('lbl-req-title').innerText = t.reqTitle;
             document.getElementById('lbl-name').innerText = t.name;
             document.getElementById('lbl-email').innerText = t.email;
@@ -321,13 +310,68 @@
             document.getElementById('btn-'+lang).classList.add('active');
         }
         
-        // Iniciar idioma guardado o español por defecto
         setLanguage(localStorage.getItem('tsx_lang') || 'es');
 
-        // --- 4. LÓGICA DE ENVÍO (AJAX) ---
+        // --- 4. ENVÍO DE DATOS ---
         const form = document.getElementById('accessForm');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             playSound('click');
             const btn = document.getElementById('btn-send');
-          
+            btn.style.opacity = "0.5";
+            btn.innerText = "...";
+
+            const formData = new FormData(e.target);
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                form.innerHTML = `<h2 style="color:#00ff88; margin-top:30px;">✔ ${db[localStorage.getItem('tsx_lang')||'es'].sent}</h2>`;
+                setTimeout(() => { cerrarModal('requestModal'); setTimeout(()=>location.reload(), 500); }, 2500);
+            })
+            .catch((err) => { 
+                console.error(err);
+                btn.innerText = "ERROR DE RED"; 
+                btn.style.background = "red"; 
+            });
+        });
+
+                // --- 5. SISTEMA DE LOGIN ---
+        function verificarAcceso() {
+            playSound('click');
+            const val = document.getElementById('passInput').value;
+            if(val === "TSX2026") window.location.href = "operaciones.html";
+            else if(val === "TSX-ART") window.location.href = "proyectos.html";
+            else {
+                const err = document.getElementById('error');
+                err.style.display = 'block';
+                document.querySelector('.panel-glass').animate([
+                    { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
+                ], { duration: 300 });
+            }
+        }
+        document.getElementById('passInput').addEventListener('keypress', (e) => { if(e.key==='Enter') verificarAcceso(); });
+
+        // --- 6. EASTER EGG NUCLEAR ---
+        let buffer = "";
+        document.addEventListener('keyup', (e) => {
+            buffer += e.key.toUpperCase();
+            if(buffer.length > 5) buffer = buffer.slice(-5);
+            if(buffer === "OMEGA") {
+                document.body.classList.add('nuclear-active');
+                playSound('virus');
+                const m = document.getElementById('nuclearModal');
+                m.style.display = 'flex'; setTimeout(()=>m.classList.add('open'), 10);
+            }
+        });
+        function detenerNuclear() {
+            document.body.classList.remove('nuclear-active');
+            const audio = document.getElementById('sfx-virus');
+            if(audio) { audio.pause(); audio.currentTime = 0; }
+            cerrarModal('nuclearModal');
+        }
+    </script>
+</body>
+</html>
