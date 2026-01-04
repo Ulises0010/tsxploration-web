@@ -3,182 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS | Quantum</title>
+    <title>NEXUS | Operations</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;500;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♠️</text></svg>">
 
     <style>
-        /* --- 1. QUANTUM VARIABLES --- */
+        /* --- 1. VARIABLES GLOBALES --- */
         :root {
             --bg-dark: #050509;
             --glass: rgba(255, 255, 255, 0.03);
+            --glass-active: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.08);
             --neon-blue: #00f3ff;
             --neon-purple: #bc13fe;
             --gold: #d4af37;
+            /* Variables Little Caesars (LC) */
+            --lc-orange: #ff6a00;
+            --lc-black: #1a0a00;
+            
             --text-main: #ffffff;
             --text-dim: #8a8a9b;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 
         body {
-            background-color: var(--bg-dark);
-            font-family: 'Rajdhani', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            color: var(--text-main);
-            display: flex;
+            background-color: var(--bg-dark); font-family: 'Rajdhani', sans-serif;
+            height: 100vh; overflow: hidden; color: var(--text-main); display: flex;
         }
 
-        /* --- 2. FONDO AURORA BOREAL (Moderno/Futurista) --- */
+        /* FONDO DINÁMICO */
         .aurora-bg {
             position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.15), transparent 60%),
-                        radial-gradient(circle at 80% 20%, rgba(188, 19, 254, 0.1), transparent 50%);
-            z-index: -1;
-            animation: auroraMove 20s infinite alternate;
-            filter: blur(80px); /* Suavizado extremo */
+            background: radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.1), transparent 60%),
+                        radial-gradient(circle at 80% 20%, rgba(188, 19, 254, 0.08), transparent 50%);
+            z-index: -1; animation: auroraMove 20s infinite alternate; filter: blur(80px);
+            transition: 1s; /* Para cambiar de color suavemente */
         }
-        @keyframes auroraMove { 
-            0% { transform: translate(0, 0) rotate(0deg); } 
-            100% { transform: translate(-50px, 50px) rotate(5deg); } 
+        /* Estado naranja para LC */
+        body.mode-lc .aurora-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(255, 106, 0, 0.15), transparent 60%),
+                        radial-gradient(circle at 20% 80%, rgba(255, 0, 0, 0.1), transparent 50%);
         }
 
-        /* --- 3. SIDEBAR DE CRISTAL --- */
+        @keyframes auroraMove { 0% { transform: translate(0, 0); } 100% { transform: translate(-30px, 30px); } }
+
+        /* --- SIDEBAR --- */
         .sidebar {
-            width: 90px; height: 100%;
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(20px); /* Efecto cristal */
-            border-right: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; align-items: center; padding: 40px 0;
-            z-index: 10;
+            width: 90px; height: 100%; background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; align-items: center; padding: 40px 0; z-index: 10;
         }
         .nav-icon {
-            font-size: 1.5rem; color: var(--text-dim); margin-bottom: 40px;
-            cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;
-            border-radius: 12px;
+            font-size: 1.5rem; color: var(--text-dim); margin-bottom: 30px;
+            cursor: pointer; transition: 0.3s; width: 50px; height: 50px;
+            display: flex; justify-content: center; align-items: center; border-radius: 12px;
         }
         .nav-icon:hover, .nav-icon.active {
-            color: var(--neon-blue); background: var(--glass);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
-            transform: scale(1.1);
+            color: var(--neon-blue); background: var(--glass-active);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); transform: scale(1.1);
+        }
+        /* Icono LC Activo */
+        .nav-icon.lc-active {
+            color: var(--lc-orange) !important;
+            box-shadow: 0 0 20px rgba(255, 106, 0, 0.4) !important;
         }
 
-        /* --- 4. ÁREA PRINCIPAL --- */
+        /* --- CONTENIDO --- */
         .main-content {
-            flex: 1; padding: 40px; position: relative;
-            display: flex; flex-direction: column;
+            flex: 1; padding: 40px; position: relative; display: flex; flex-direction: column;
+            overflow-y: auto; overflow-x: hidden;
         }
 
-        /* HEADER */
         .header {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 40px; animation: slideDown 1s ease-out;
+            display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;
+            animation: slideDown 0.8s ease-out;
         }
         .title-area h1 {
-            font-family: 'Syncopate', sans-serif; /* Fuente futurista ancha */
-            font-size: 2.5rem; text-transform: uppercase; letter-spacing: 5px;
-            background: linear-gradient(to right, #fff, var(--text-dim));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Syncopate', sans-serif; font-size: 2rem; text-transform: uppercase; letter-spacing: 4px;
+            background: linear-gradient(to right, #fff, var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .title-area p { color: var(--neon-blue); letter-spacing: 2px; font-weight: 600; margin-top: 5px; }
-        
-        .system-time { text-align: right; }
-        .time-big { font-size: 3rem; font-weight: 300; line-height: 1; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
-        .date-small { color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; }
+        .system-time .time-big { font-size: 2.5rem; font-weight: 300; line-height: 1; }
+        .system-time .date-small { color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; }
 
-        /* GRID LAYOUT */
-        .dashboard-grid {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 30px; height: 100%;
-        }
+        /* --- VISTAS COMUNES --- */
+        .view-section { display: none; animation: fadeUp 0.6s ease-out; height: 100%; }
+        .view-section.active-view { display: block; }
 
-        /* --- 5. TARJETAS QUANTUM (Glassmorphism) --- */
+        /* Estilos generales de tarjetas */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; height: 80%; }
         .q-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            position: relative; overflow: hidden;
-            backdrop-filter: blur(15px);
-            transition: 0.4s;
-            animation: fadeUp 1s ease-out backwards;
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 30px; position: relative; backdrop-filter: blur(15px); transition: 0.4s;
         }
-        .q-card:nth-child(2) { animation-delay: 0.2s; }
-        .q-card:nth-child(3) { animation-delay: 0.4s; }
+        .card-stat { font-size: 3rem; font-weight: 700; color: #fff; }
+        .card-sub { color: var(--neon-blue); margin-top: 5px; letter-spacing: 1px; }
 
-        .q-card:hover {
-            border-color: rgba(0, 243, 255, 0.3);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            transform: translateY(-5px);
+        /* --- ESTILOS ESPECÍFICOS: LITTLE CAESARS (LC) --- */
+        .lc-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; height: 100%;
         }
+        .lc-card {
+            background: rgba(20, 10, 5, 0.6); border: 1px solid rgba(255, 106, 0, 0.3);
+            border-radius: 4px; padding: 20px; position: relative; overflow: hidden;
+        }
+        /* Barras de escaneo */
+        .lc-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--lc-orange); opacity: 0.5; animation: scanline 3s linear infinite;
+        }
+        .lc-title { color: var(--lc-orange); font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 2px; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; }
+        .lc-data { font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 1.5rem; }
+        .lc-subdata { font-size: 0.8rem; color: #666; margin-top: 5px; }
 
-        /* Destello en hover */
-        .q-card::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-20deg); transition: 0.5s;
+        /* El Radar de Pizza */
+        .pizza-radar-container {
+            grid-column: span 1; display: flex; justify-content: center; align-items: center; position: relative;
         }
-        .q-card:hover::after { left: 150%; transition: 0.7s; }
-
-        .card-header { display: flex; justify-content: space-between; margin-bottom: 20px; color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
-        .card-stat { font-size: 3.5rem; font-weight: 700; color: #fff; }
-        .card-sub { color: var(--neon-blue); margin-top: 5px; font-size: 1.1rem; }
-
-        /* --- 6. EL NÚCLEO (THE CORE) - Visual Central --- */
-        .core-container {
-            display: flex; justify-content: center; align-items: center;
-            position: relative; height: 100%; min-height: 250px;
+        .pizza-radar {
+            width: 200px; height: 200px; border-radius: 50%;
+            border: 2px dashed var(--lc-orange);
+            background: radial-gradient(circle, rgba(255,106,0,0.1), transparent);
+            position: relative; animation: rotateRadar 10s linear infinite;
+            box-shadow: 0 0 30px rgba(255, 106, 0, 0.2);
         }
-        .core-ring {
-            width: 180px; height: 180px; border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            position: absolute;
-            display: flex; justify-content: center; align-items: center;
+        .radar-line {
+            position: absolute; top: 50%; left: 50%; width: 50%; height: 2px;
+            background: var(--lc-orange); transform-origin: 0 0;
+            animation: sweep 2s linear infinite; box-shadow: 0 0 10px var(--lc-orange);
         }
-        /* Anillos animados */
-        .ring-1 { border-top: 2px solid var(--neon-blue); animation: spin 4s linear infinite; width: 180px; height: 180px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); }
-        .ring-2 { border-bottom: 2px solid var(--neon-purple); animation: spinReverse 6s linear infinite; width: 140px; height: 140px; }
-        .ring-3 { border-left: 2px solid var(--gold); animation: spin 8s linear infinite; width: 100px; height: 100px; }
-        
-        .core-center {
-            width: 60px; height: 60px; background: #fff; border-radius: 50%;
-            box-shadow: 0 0 50px var(--neon-blue), 0 0 100px var(--neon-purple);
-            animation: pulseCore 3s ease-in-out infinite;
+        .heat-dot {
+            position: absolute; width: 6px; height: 6px; background: red; border-radius: 50%;
+            animation: pulse 1s infinite;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 800px) {
-            body { flex-direction: column; overflow-y: auto; }
-            .sidebar { width: 100%; height: 70px; flex-direction: row; justify-content: space-around; position: fixed; bottom: 0; padding: 0; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); }
-            .main-content { padding: 20px; padding-bottom: 90px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .system-time { text-align: left; }
-            .title-area h1 { font-size: 1.8rem; }
+        /* Logo Estilizado */
+        .lc-logo-text {
+            position: absolute; bottom: 20px; right: 20px; text-align: right;
         }
+        .lc-brand { color: var(--lc-orange); font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; text-transform: uppercase; font-style: italic; }
+        .lc-slogan { color: #fff; font-size: 0.7rem; letter-spacing: 3px; }
 
         /* ANIMACIONES */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes spinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-        @keyframes pulseCore { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
-        @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
+        @keyframes scanline { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        @keyframes rotateRadar { 100% { transform: rotate(360deg); } }
+        @keyframes sweep { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp { from { transform: translateY(20px); opacity: 0; } to { opacity: 1; } }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: 70px; flex-direction: row; justify-content: space-around; padding: 0; position: fixed; bottom: 0; background: rgba(5,5,9,0.95); border-top: 1px solid var(--glass-border); }
+            .lc-grid { grid-template-columns: 1fr; overflow-y: auto; padding-bottom: 50px;}
+            .main-content { padding: 20px; padding-bottom: 90px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <audio id="sfx-click" src="audio/click.mp3"></audio>
-
-    <div class="aurora-bg"></div>
+    <div class="aurora-bg" id="main-bg"></div>
 
     <nav class="sidebar">
-        <div class="nav-icon active" onclick="playSfx()">📊</div>
-        <div class="nav-icon" onclick="playSfx()">📁</div>
-        <div class="nav-icon" onclick="playSfx()">🧠</div>
-        <div class="nav-icon" onclick="playSfx()">⚙️</div>
+        <div class="nav-icon active" onclick="switchView('dashboard', this)">📊</div>
+        <div class="nav-icon" onclick="switchView('lc', this)">🍕</div> 
+        
+        <div class="nav-icon" onclick="switchView('projects', this)">📁</div>
+        <div class="nav-icon" onclick="switchView('ai', this)">🧠</div>
+        <div class="nav-icon" onclick="switchView('settings', this)">⚙️</div>
         <div class="nav-icon" style="margin-top: auto; color: #ff5555;" onclick="window.location.href='index.html'">🚪</div>
     </nav>
 
@@ -186,66 +180,174 @@
         
         <header class="header">
             <div class="title-area">
-                <h1>Nexus Core</h1>
-                <p>BIENVENIDO, BOSS.</p>
+                <h1 id="page-title">NEXUS CORE</h1>
+                <p id="page-subtitle">SISTEMA ONLINE</p>
             </div>
             <div class="system-time">
                 <div class="time-big" id="clock">00:00</div>
-                <div class="date-small" id="date">SISTEMA ONLINE</div>
+                <div class="date-small" id="date">FECHA</div>
             </div>
         </header>
 
-        <div class="dashboard-grid">
-            
-            <div style="display: grid; gap: 20px;">
-                <div class="q-card">
-                    <div class="card-header">
-                        <span>Estado de Red</span>
-                        <span style="color: #00ff88;">● ACTIVO</span>
+        <section id="view-dashboard" class="view-section active-view">
+            <div class="dashboard-grid">
+                <div style="display: grid; gap: 20px;">
+                    <div class="q-card">
+                        <div style="color: var(--text-dim); font-size:0.8rem; margin-bottom:10px;">ESTADO DE RED</div>
+                        <div class="card-stat">100%</div>
+                        <div class="card-sub" style="color:#00ff88;">● FUNCIONAL</div>
                     </div>
-                    <div class="card-stat">100%</div>
-                    <div class="card-sub">Integridad Estructural</div>
+                    <div class="q-card">
+                        <div style="color: var(--text-dim); font-size:0.8rem; margin-bottom:10px;">ALERTAS</div>
+                        <div class="card-stat">0</div>
+                        <div class="card-sub">Sin amenazas detectadas</div>
+                    </div>
                 </div>
-
-                <div class="q-card">
-                    <div class="card-header">
-                        <span>Proyectos Globales</span>
-                        <span>↗ +2</span>
-                    </div>
-                    <div class="card-stat">3</div>
-                    <div class="card-sub">En desarrollo activo</div>
+                <div class="q-card" style="display: flex; justify-content: center; align-items: center; border-radius: 50%;">
+                   <div style="width: 150px; height: 150px; border: 2px solid var(--neon-blue); border-radius: 50%; box-shadow: 0 0 50px var(--neon-blue);"></div>
                 </div>
             </div>
+        </section>
 
-            <div class="q-card core-container">
-                <div class="ring-1 core-ring"></div>
-                <div class="ring-2 core-ring"></div>
-                <div class="ring-3 core-ring"></div>
-                <div class="core-center"></div>
-                <div style="position: absolute; bottom: 20px; font-size: 0.8rem; letter-spacing: 3px; color: var(--text-dim);">AI: LISTENING</div>
+        <section id="view-lc" class="view-section">
+            <div class="lc-grid">
+                
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="lc-card">
+                        <div class="lc-title">TRANSACTION VELOCITY</div>
+                        <div class="lc-data" id="lc-sales">45.2 KHz</div>
+                        <div class="lc-subdata">FLOW: STABLE</div>
+                    </div>
+                    <div class="lc-card">
+                        <div class="lc-title">THERMAL OUTPUT</div>
+                        <div class="lc-data">475°F</div>
+                        <div class="lc-subdata">CHAMBER: OPTIMAL</div>
+                    </div>
+                    <div class="lc-card">
+                        <div class="lc-title">UNIT EFFICIENCY</div>
+                        <div class="lc-data">98.4%</div>
+                        <div class="lc-subdata">HNR PROTOCOL: ACTIVE</div>
+                    </div>
+                </div>
+
+                <div class="pizza-radar-container">
+                    <div class="pizza-radar">
+                        <div class="radar-line"></div>
+                        <div class="heat-dot" style="top: 30%; left: 40%;"></div>
+                        <div class="heat-dot" style="top: 60%; left: 70%;"></div>
+                        <div class="heat-dot" style="top: 20%; left: 60%;"></div>
+                    </div>
+                    <div style="position: absolute; bottom: -40px; color: var(--lc-orange); font-size: 0.8rem; letter-spacing: 3px;">SCANNING SECTOR 7</div>
+                </div>
+
+                <div class="lc-card" style="font-family: monospace; font-size: 0.7rem; color: #aaa; overflow: hidden;">
+                    <div class="lc-title">SUPPLY STREAM LOG</div>
+                    <div id="code-log">
+                        > CHECKING DOUGH_INTEGRITY... OK<br>
+                        > SAUCE_VISCOSITY... NOMINAL<br>
+                        > CHEESE_MATRIX... LOADED<br>
+                        > PEPPERONI_COUNT... 5000+<br>
+                        > BOX_DEPLOYMENT... READY<br>
+                        > CRAZY_BREAD_SYNC... PENDING<br>
+                        > PORTAL_ACCESS... GRANTED<br>
+                        > SYSTEM_ID: LC-2026-X
+                    </div>
+                </div>
+
+                <div class="lc-logo-text">
+                    <div class="lc-brand">Little Caesars</div>
+                    <div class="lc-slogan">GLOBAL OPERATIONS // CLASSIFIED</div>
+                </div>
+
             </div>
+        </section>
 
-        </div>
+        <section id="view-projects" class="view-section">
+            <h3 style="color: var(--gold); margin-bottom: 20px;">ARCHIVOS</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div class="q-card">Génesis</div>
+                <div class="q-card">Art Gallery</div>
+            </div>
+        </section>
+
+        <section id="view-ai" class="view-section">
+            <div class="q-card" style="height: 100%;">
+                <p style="color: var(--neon-blue);">Nexus I.A. Listening...</p>
+            </div>
+        </section>
+
+        <section id="view-settings" class="view-section">
+            <div class="q-card">
+                <p>Ajustes de Sistema</p>
+            </div>
+        </section>
 
     </main>
 
     <script>
-        // RELOJ DIGITAL
+        // --- LÓGICA DE CRISTALES ---
+        function switchView(viewId, btnElement) {
+            // Sonido
+            const audio = document.getElementById('sfx-click');
+            if(audio) { audio.currentTime = 0; audio.play().catch(e=>{}); }
+
+            // 1. Gestionar Botones
+            document.querySelectorAll('.nav-icon').forEach(el => {
+                el.classList.remove('active');
+                el.classList.remove('lc-active'); // Quitar naranja
+            });
+
+            // 2. Activar Botón Específico
+            if (viewId === 'lc') {
+                btnElement.classList.add('lc-active'); // Poner naranja
+                document.body.classList.add('mode-lc'); // Cambiar fondo a naranja
+            } else {
+                btnElement.classList.add('active'); // Poner azul
+                document.body.classList.remove('mode-lc'); // Volver a azul
+            }
+
+            // 3. Gestionar Secciones
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.getElementById('view-' + viewId).classList.add('active-view');
+
+            // 4. Cambiar Títulos
+            const titles = {
+                'dashboard': ['NEXUS CORE', 'SISTEMA ONLINE'],
+                'lc': ['CAESAR OPS', 'NIVEL DE ACCESO: 5'],
+                'projects': ['PROYECTOS', 'ARCHIVOS'],
+                'ai': ['NEXUS I.A.', 'ASISTENTE VIRTUAL'],
+                'settings': ['AJUSTES', 'CONFIGURACIÓN']
+            };
+            document.getElementById('page-title').innerText = titles[viewId][0];
+            document.getElementById('page-subtitle').innerText = titles[viewId][1];
+            
+            // Si es LC, cambiar color del texto del título a naranja
+            if (viewId === 'lc') {
+                document.querySelector('.title-area h1').style.background = 'linear-gradient(to right, #ff6a00, #ffcc00)';
+                document.querySelector('.title-area h1').style.webkitBackgroundClip = 'text';
+            } else {
+                document.querySelector('.title-area h1').style.background = 'linear-gradient(to right, #fff, var(--text-dim))';
+                document.querySelector('.title-area h1').style.webkitBackgroundClip = 'text';
+            }
+        }
+
+        // --- SIMULACIÓN DE DATOS (MATRIX EFFECT) ---
+        function updateRandomStats() {
+            // Números aleatorios para LC
+            const sales = (40 + Math.random() * 10).toFixed(1);
+            const element = document.getElementById('lc-sales');
+            if(element) element.innerText = sales + " KHz";
+        }
+        setInterval(updateRandomStats, 2000);
+
+        // --- RELOJ ---
         function updateTime() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            const options = { weekday: 'long', month: 'short', day: 'numeric' };
-            document.getElementById('date').innerText = now.toLocaleDateString('es-ES', options).toUpperCase();
+            document.getElementById('date').innerText = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase();
         }
         setInterval(updateTime, 1000);
         updateTime();
-
-        // AUDIO FX
-        function playSfx() {
-            const audio = document.getElementById('sfx-click');
-            if(audio) { audio.currentTime = 0; audio.play().catch(e=>{}); }
-        }
     </script>
 </body>
 </html>
