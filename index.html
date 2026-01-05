@@ -1,389 +1,103 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
+    <script defer src="tsx-security.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♠️</text></svg>">
-    
     <title>TSXPLORATION | Global Nexus</title>
-    
-    <style>
-        /* --- 1. VARIABLES & BASE --- */
-        :root {
-            --gold: #d4af37;
-            --accent-blue: #00c6ff;
-            --mystic-purple: #bc13fe;
-            --nuclear-red: #ff0000;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden;
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141e30);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #fff;
-        }
-
-        /* --- 2. FONDO --- */
-        #particle-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1; overflow: hidden;
-        }
-        .particle {
-            position: absolute; width: 4px; height: 4px; border-radius: 50%;
-            opacity: 0; box-shadow: 0 0 20px currentColor;
-        }
-
-        /* EFECTO NUCLEAR */
-        body.nuclear-active { animation: nuclearShake 0.5s infinite, nuclearFlash 1s infinite; }
-        @keyframes nuclearShake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, 2px); } 100% { transform: translate(1px, -2px); } }
-        @keyframes nuclearFlash { 0%, 100% { background: #000; } 50% { background: #500000; } }
-
-        /* --- 3. INTERFAZ (UI) --- */
-        /* Z-Index alto para asegurar que los botones funcionen */
-        .ui-layer { position: relative; z-index: 100; } 
-
-        .access-btn-container { position: absolute; top: 20px; left: 20px; z-index: 200; }
-        .access-btn {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-            color: #aaa; font-size: 0.75rem; font-weight: bold; 
-            padding: 8px 15px; border-radius: 30px; cursor: pointer;
-            backdrop-filter: blur(5px); transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .access-btn:hover, .access-btn:active { 
-            color: #fff; border-color: var(--accent-blue); 
-            box-shadow: 0 0 15px rgba(0, 198, 255, 0.5); 
-            transform: scale(1.05); 
-        }
-
-        .lang-bar {
-            position: absolute; top: 20px; right: 20px; z-index: 200; display: flex; gap: 8px;
-            background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px);
-        }
-        .lang-btn {
-            background: transparent; border: none; color: #aaa; font-size: 0.75rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s; padding: 5px 8px; border-radius: 10px;
-        }
-        .lang-btn.active { background: var(--gold); color: #000; box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
-
-        .brand-container { text-align: center; margin-bottom: 40px; animation: fadeInUp 1.5s ease-out; position: relative; z-index: 100; }
-        .logo {
-            font-size: 4rem; font-weight: 800; letter-spacing: 8px;
-            background: linear-gradient(to right, #fff, #e0e0e0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-        }
-        .spade { font-size: 3rem; color: var(--gold); -webkit-text-fill-color: var(--gold); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); animation: pulseSpade 3s infinite alternate; }
-        .tagline { margin-top: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 6px; font-weight: 300; color: rgba(255, 255, 255, 0.7); }
-
-        .panel-glass {
-            background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border);
-            padding: 50px 40px; border-radius: 24px; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
-            width: 360px; text-align: center; animation: fadeInUp 1.5s ease-out 0.3s backwards; position: relative; z-index: 100;
-        }
-        .input-label { display: block; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 20px; color: rgba(255,255,255,0.5); font-weight: 600; }
-        .input-code {
-            width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px;
-            color: white; text-align: center; letter-spacing: 6px; font-size: 1.3rem; font-weight: bold; outline: none; transition: 0.4s;
-        }
-        .input-code:focus { border-color: var(--accent-blue); box-shadow: 0 0 25px rgba(0, 198, 255, 0.3); background: rgba(0,0,0,0.5); }
-        .btn-enter {
-            width: 100%; padding: 18px; background: linear-gradient(135deg, var(--accent-blue), #0056b3);
-            border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
-            cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px -10px rgba(0, 198, 255, 0.5);
-        }
-        .btn-enter:hover { transform: scale(1.02); }
-        .error-msg { color: #ff5b5b; margin-top: 20px; font-weight: 600; display: none; }
-
-        .info-trigger {
-            position: absolute; bottom: 30px; cursor: pointer; z-index: 200;
-            color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 2px;
-            transition: 0.3s; text-transform: uppercase; border-bottom: 1px solid transparent; 
-        }
-        .info-trigger:hover { color: var(--gold); border-color: var(--gold); }
-
-        /* --- 4. MODALES --- */
-        .ts-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 300; backdrop-filter: blur(15px);
-            align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease;
-        }
-        .ts-modal.open { opacity: 1; }
-        
-        .modal-card {
-            background: #0a0a0a; border: 1px solid #333; width: 90%; max-width: 600px;
-            padding: 40px; border-radius: 20px; text-align: center; position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            opacity: 0; filter: brightness(500%) blur(30px); transform: scale(0.8);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .ts-modal.open .modal-card { opacity: 1; filter: brightness(100%) blur(0px); transform: scale(1); }
-
-        .manifesto-card { border-color: var(--gold); box-shadow: 0 0 60px rgba(212, 175, 55, 0.3); }
-        .manifesto-title { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .manifesto-text { color: #ccc; line-height: 1.8; font-size: 0.95rem; margin-bottom: 30px; text-align: justify; white-space: pre-line; max-height: 60vh; overflow-y: auto; }
-
-        .request-card { border-color: var(--accent-blue); box-shadow: 0 0 60px rgba(0, 198, 255, 0.3); }
-        .request-title { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
-
-        /* Formulario */
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-label { color: #888; font-size: 0.8rem; margin-left: 10px; margin-bottom: 5px; display: block; }
-        .form-input, .form-textarea { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; outline: none; transition: 0.3s; }
-        .form-input:focus, .form-textarea:focus { border-color: var(--accent-blue); }
-        .form-textarea { height: 80px; resize: none; }
-        
-        .close-btn-modal { padding: 10px 30px; background: transparent; border: 1px solid #555; color: #fff; cursor: pointer; transition: 0.3s; border-radius: 30px; font-weight: bold; margin-top: 10px; }
-        .submit-btn { width: 100%; padding: 12px; background: var(--accent-blue); border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* NUCLEAR */
-        .nuclear-card { border: 2px solid var(--nuclear-red); background: #1a0000; }
-        .nuclear-symbol { font-size: 4rem; color: var(--nuclear-red); animation: pulseNuclear 0.5s infinite alternate; }
-        @keyframes pulseNuclear { from { opacity: 0.5; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
-
-        @media (max-width: 500px) { .access-btn-container { top: 70px; left: 50%; transform: translateX(-50%); width: 100%; display: flex; justify-content: center;} }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes pulseSpade { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <!-- Aquí luego conectaremos CSS y JS -->
+    <link rel="stylesheet" href="tsx-style.css">
+    <script defer src="tsx-core.js"></script>
 </head>
+
 <body>
 
-    <audio id="sfx-click" src="audio/click.mp3"></audio>
-    <audio id="sfx-tornado" src="audio/tornado.mp3"></audio>
-    <audio id="sfx-virus" src="audio/virus.mp3"></audio>
+    <!-- SECUENCIA DE INICIO -->
+    <div id="boot-sequence" class="boot-screen">
+        <div class="boot-logo">TSX</div>
+        <div class="boot-text">Inicializando Sistema...</div>
+    </div>
 
+    <!-- PARTÍCULAS -->
     <div id="particle-container"></div>
 
-    <div class="access-btn-container">
-        <button class="access-btn" id="btn-request" onclick="abrirModal('requestModal')">
-            ♠️ SOLICITAR ACCESO
-        </button>
+    <!-- BOTÓN DE ACCESO -->
+    <div class="access-btn-container ui-layer">
+        <button id="btn-request" class="access-btn">SOLICITAR ACCESO</button>
     </div>
 
-    <div class="lang-bar">
-        <button id="btn-es" class="lang-btn active" onclick="setLanguage('es')">ES</button>
-        <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
-        <button id="btn-zh" class="lang-btn" onclick="setLanguage('zh')">中</button>
-        <button id="btn-hi" class="lang-btn" onclick="setLanguage('hi')">हि</button>
-        <button id="btn-fr" class="lang-btn" onclick="setLanguage('fr')">FR</button>
+    <!-- IDIOMAS -->
+    <div class="lang-bar ui-layer">
+        <button class="lang-btn active" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="zh">中</button>
+        <button class="lang-btn" data-lang="hi">HI</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
     </div>
 
+    <!-- MARCA -->
     <div class="brand-container ui-layer">
-        <div class="logo"><span class="spade">♠️</span> TSX <span class="spade">♠️</span></div>
-        <div class="tagline" id="txt-tagline">The Solitary Xploration</div>
+        <div class="logo">
+            <span class="spade">♠</span> TSX <span class="spade">♠</span>
+        </div>
+        <div id="txt-tagline" class="tagline">The Solitary Xploration</div>
     </div>
 
+    <!-- PANEL DE AUTENTICACIÓN -->
     <div class="panel-glass ui-layer">
-        <span class="input-label" id="txt-auth">// AUTENTICACIÓN NEXUS //</span>
-        <input type="password" id="passInput" class="input-code" placeholder="••••••">
-        <button class="btn-enter" id="btn-connect" onclick="verificarAcceso()">Conectar</button>
+        <span id="txt-auth" class="input-label">// AUTENTICACIÓN NEXUS //</span>
+        <input id="passInput" type="password" class="input-code" placeholder="......">
+        <button id="btn-connect" class="btn-enter">Conectar</button>
         <p id="error" class="error-msg">Acceso Denegado</p>
     </div>
 
-    <div class="info-trigger ui-layer" id="btn-about" onclick="abrirModal('manifestoModal')">
-        ℹ️ SOBRE TSXPLORATION
-    </div>
+    <!-- BOTÓN SOBRE TSX -->
+    <div id="btn-about" class="info-trigger">i SOBRE TSXPLORATION</div>
 
+    <!-- MODAL MANIFIESTO -->
     <div id="manifestoModal" class="ts-modal">
         <div class="modal-card manifesto-card">
-            <h2 class="manifesto-title" id="txt-about-title" style="color:var(--gold); margin-bottom:20px;">NUESTRA IDENTIDAD</h2>
-            <div class="manifesto-text" id="txt-about-desc"></div>
-            <button class="close-btn-modal" style="border-color:var(--gold); color:var(--gold);" onclick="cerrarModal('manifestoModal')">CERRAR / CLOSE</button>
+            <h2 id="txt-about-title" class="modal-title">NUESTRA IDENTIDAD</h2>
+            <div id="txt-about-desc" class="modal-text"></div>
+            <button class="close-btn-modal" data-close>CERRAR</button>
         </div>
     </div>
 
+    <!-- MODAL SOLICITUD -->
     <div id="requestModal" class="ts-modal">
         <div class="modal-card request-card">
-            <h2 class="request-title" id="lbl-req-title" style="color:var(--accent-blue); margin-bottom:20px;">SOLICITUD DE ACCESO</h2>
-            
-            <form id="accessForm" name="solicitud-acceso" method="POST" data-netlify="true">
+            <h2 id="lbl-req-title" class="modal-title">SOLICITUD DE ACCESO</h2>
+
+            <form id="accessForm" method="POST" data-netlify="true">
                 <input type="hidden" name="form-name" value="solicitud-acceso">
-                <input type="hidden" name="subject" value="🔔 Nueva Solicitud TSX">
-                
-                <div class="form-group">
-                    <label class="form-label" id="lbl-name">Nombre / Alias</label>
-                    <input type="text" name="nombre" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" id="lbl-email">Contacto</label>
-                    <input type="email" name="email" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" id="lbl-reason">Propósito</label>
-                    <textarea name="motivo" class="form-textarea" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn" id="btn-send">ENVIAR TRANSMISIÓN</button>
+
+                <label id="lbl-name" class="form-label">Nombre / Alias</label>
+                <input type="text" name="nombre" class="form-input" required>
+
+                <label id="lbl-email" class="form-label">Contacto</label>
+                <input type="email" name="email" class="form-input" required>
+
+                <label id="lbl-reason" class="form-label">Propósito</label>
+                <textarea name="motivo" class="form-textarea" required></textarea>
+
+                <button id="btn-send" type="submit" class="submit-btn">ENVIAR TRANSMISIÓN</button>
             </form>
 
-            <button class="close-btn-modal" style="border-color:var(--accent-blue); color:var(--accent-blue); margin-top:20px;" onclick="cerrarModal('requestModal')">CANCELAR</button>
+            <button class="close-btn-modal" data-close>CANCELAR</button>
         </div>
     </div>
 
-    <div id="nuclearModal" class="ts-modal" style="background: rgba(50,0,0,0.9);">
+    <!-- MODAL NUCLEAR -->
+    <div id="nuclearModal" class="ts-modal nuclear-bg">
         <div class="modal-card nuclear-card">
-            <div class="nuclear-symbol">☢️</div>
-            <h2 style="color:red; letter-spacing:5px;">WARNING</h2>
-            <p style="color:#fff; margin:20px 0;">SISTEMA COMPROMETIDO<br>NIVEL OMEGA</p>
-            <button class="close-btn-modal" style="border-color:red; color:red;" onclick="detenerNuclear()">DESACTIVAR</button>
+            <div class="nuclear-symbol">☢</div>
+            <h2 class="nuclear-title">WARNING</h2>
+            <p class="nuclear-text">SISTEMA COMPROMETIDO<br>NIVEL OMEGA</p>
+            <button id="btn-nuclear-stop" class="close-btn-modal">DESACTIVAR</button>
         </div>
     </div>
 
-    <script>
-        // --- 1. AUDIO Y FUNCIONES BÁSICAS ---
-        function playSound(id) {
-            const audio = document.getElementById('sfx-' + id);
-            if(audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
-        }
-
-        // --- 2. APERTURA DE MODALES (SIN TORNADO) ---
-        // Se ha simplificado para garantizar que funcione en móviles
-        function abrirModal(id) {
-            playSound('click'); // Sonido simple
-            
-            const modal = document.getElementById(id);
-            if(modal) {
-                modal.style.display = 'flex';
-                // Pequeño delay para permitir que el navegador procese el display:flex antes de la opacidad
-                setTimeout(() => {
-                    modal.classList.add('open');
-                }, 10);
-            } else {
-                console.error("No se encontró el modal: " + id);
-            }
-        }
-
-        function cerrarModal(id) {
-            playSound('click');
-            const modal = document.getElementById(id);
-            if(modal) {
-                modal.classList.remove('open');
-                setTimeout(() => { modal.style.display = 'none'; }, 500);
-            }
-        }
-
-                // --- 3. IDIOMAS (VERSIÓN EXTENDIDA & CORREGIDA) ---
-        const db = {
-            es: { 
-                reqBtn: "♠️ SOLICITAR ACCESO", tagline: "The Solitary Xploration", auth: "// AUTENTICACIÓN NEXUS //", connect: "Conectar", 
-                aboutBtn: "ℹ️ SOBRE TSXPLORATION", 
-                aboutDesc: "Fundado por **Ulises Jimenez**. Una visión que nació en 2010 y evolucionó hace 9 años para convertirse en la insignia TS.\n\nCada ser humano posee una capacidad única, a menudo contenida por los muros del conformismo. TSXPLORATION es una reflexión sobre el universo infinito que habita en la mente.\n\nSi en tu pensamiento puedes transformar un chocolate en una manzana, demuestras que la realidad es moldeable. Al derribar las barreras mentales, ese poder creativo trasciende al mundo físico.\n\nLa tecnología actual es la prueba: no es obra de una sola persona, sino la suma de miles de mentes soñando en conjunto. Cuando desbloqueas tu propia pieza del rompecabezas, no solo cambias tú; impulsas la evolución de todos.",
-                reqTitle: "SOLICITUD DE ACCESO", name: "Nombre / Alias", email: "Contacto", reason: "Propósito", send: "ENVIAR TRANSMISIÓN", sent: "SOLICITUD ENVIADA." 
-            },
-            en: { 
-                reqBtn: "♠️ REQUEST ACCESS", tagline: "The Solitary Xploration", auth: "// NEXUS AUTH //", connect: "Connect", 
-                aboutBtn: "ℹ️ ABOUT TSXPLORATION", 
-                aboutDesc: "Founded by **Ulises Jimenez**. A vision born in 2010 that evolved 9 years ago to become the TS insignia.\n\nEvery human possesses a unique capacity, often contained by the walls of conformity. TSXPLORATION is a reflection on the infinite universe that inhabits the mind.\n\nIf in your thoughts you can transform chocolate into an apple, you prove that reality is malleable. By breaking down mental barriers, that creative power transcends into the physical world.\n\nCurrent technology is the proof: it is not the work of a single person, but the sum of thousands of minds dreaming together. When you unlock your own piece of the puzzle, you don't just change yourself; you drive the evolution of everyone.",
-                reqTitle: "ACCESS REQUEST", name: "Name / Alias", email: "Contact", reason: "Purpose", send: "TRANSMIT DATA", sent: "REQUEST SENT." 
-            },
-            zh: { 
-                reqBtn: "♠️ 申请访问", tagline: "孤独的探索", auth: "// 核心验证 //", connect: "连接", aboutBtn: "ℹ️ 关于 TSX", 
-                aboutDesc: "由 **Ulises Jimenez** 创立。这一愿景诞生于 2010 年，并在 9 年前演变为 TS 徽章。\n\n每个人都拥有一种独特的能力，往往被墨守成规的墙壁所束缚。TSXPLORATION 是对栖息在心中的无限宇宙的思考。\n\n如果在你的思想中，你能把巧克力变成苹果，这就证明现实是可塑的。通过打破精神障碍，这种创造力将超越到物理世界。\n\n现代科技就是证据：它不是一个人的作品，而是成千上万个思想共同梦想的总和。当你解开属于你自己的那块拼图时，你不仅改变了自己，也推动了所有人的进化。", 
-                reqTitle: "访问申请", name: "姓名", email: "邮件", reason: "目的", send: "发送", sent: "已发送" 
-            },
-            hi: { 
-                reqBtn: "♠️ अनुरोध", tagline: "एकान्त अन्वेषण", auth: "// नेक्सस //", connect: "कनेक्ट", aboutBtn: "ℹ️ के बारे में", 
-                aboutDesc: "**Ulises Jimenez** द्वारा स्थापित। एक दृष्टि जो 2010 में पैदा हुई और 9 साल पहले TS प्रतीक बनने के लिए विकसित हुई।\n\nप्रत्येक मनुष्य के पास एक अद्वितीय क्षमता होती है, जो अक्सर अनुरूपता की दीवारों से घिरी होती है। TSXPLORATION मन में रहने वाले अनंत ब्रह्मांड पर एक प्रतिबिंब है।\n\nयदि आप अपने विचारों में चॉकलेट को सेब में बदल सकते हैं, तो आप साबित करते हैं कि वास्तविकता निंदनीय है। मानसिक बाधाओं को तोड़कर, वह रचनात्मक शक्ति भौतिक दुनिया में पहुंच जाती है।\n\nवर्तमान तकनीक इसका प्रमाण है: यह किसी एक व्यक्ति का काम नहीं है, बल्कि एक साथ सपने देखने वाले हजारों दिमागों का योग है। जब आप पहेली के अपने टुकड़े को अनलॉक करते हैं, तो आप न केवल खुद को बदलते हैं; आप सभी के विकास को आगे बढ़ाते हैं。", 
-                reqTitle: "प्रवेश अनुरोध", name: "नाम", email: "ईमेल", reason: "उद्देश्य", send: "भेजें", sent: "भेजा गया" 
-            },
-            fr: { 
-                reqBtn: "♠️ ACCÈS", tagline: "L'Exploration Solitaire", auth: "// AUTHENTIFICATION //", connect: "Connexion", aboutBtn: "ℹ️ À PROPOS", 
-                aboutDesc: "Fondé par **Ulises Jimenez**. Une vision née en 2010 qui a évolué il y a 9 ans pour devenir l'insigne TS.\n\nChaque être humain possède une capacité unique, souvent contenue par les murs du conformisme. TSXPLORATION est une réflexion sur l'univers infini qui habite l'esprit.\n\nSi dans vos pensées vous pouvez transformer du chocolat en une pomme, vous prouvez que la réalité est malléable. En brisant les barrières mentales, ce pouvoir créatif transcende le monde physique.\n\nLa technologie actuelle en est la preuve : ce n'est pas l'œuvre d'une seule personne, mais la somme de milliers d'esprits rêvant ensemble. Lorsque vous déverrouillez votre propre pièce du puzzle, vous ne changez pas seulement vous-même ; vous propulsez l'évolution de tous.", 
-                reqTitle: "DEMANDE", name: "Nom", email: "Email", reason: "But", send: "ENVOYER", sent: "ENVOYÉ" 
-            }
-        };
-
-        function setLanguage(lang) {
-            playSound('click');
-            localStorage.setItem('tsx_lang', lang);
-            const t = db[lang];
-            
-            document.getElementById('btn-request').innerText = t.reqBtn;
-            document.getElementById('txt-tagline').innerText = t.tagline;
-            document.getElementById('txt-auth').innerText = t.auth;
-            document.getElementById('btn-connect').innerText = t.connect;
-            document.getElementById('btn-about').innerText = t.aboutBtn;
-            // Usamos innerText para evitar inyección de HTML no deseado y saltos de línea simples
-            document.getElementById('txt-about-desc').innerText = t.aboutDesc;
-            
-            document.getElementById('lbl-req-title').innerText = t.reqTitle;
-            document.getElementById('lbl-name').innerText = t.name;
-            document.getElementById('lbl-email').innerText = t.email;
-            document.getElementById('lbl-reason').innerText = t.reason;
-            document.getElementById('btn-send').innerText = t.send;
-            
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-'+lang).classList.add('active');
-        }
-        
-        setLanguage(localStorage.getItem('tsx_lang') || 'es');
-
-        // --- 4. ENVÍO DE DATOS ---
-        const form = document.getElementById('accessForm');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            playSound('click');
-            const btn = document.getElementById('btn-send');
-            btn.style.opacity = "0.5";
-            btn.innerText = "...";
-
-            const formData = new FormData(e.target);
-            fetch('/', {
-                method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData).toString()
-            })
-            .then(() => {
-                form.innerHTML = `<h2 style="color:#00ff88; margin-top:30px;">✔ ${db[localStorage.getItem('tsx_lang')||'es'].sent}</h2>`;
-                setTimeout(() => { cerrarModal('requestModal'); setTimeout(()=>location.reload(), 500); }, 2500);
-            })
-            .catch((err) => { 
-                console.error(err);
-                btn.innerText = "ERROR DE RED"; 
-                btn.style.background = "red"; 
-            });
-        });
-
-        // --- 5. SISTEMA DE LOGIN ---
-        function verificarAcceso() {
-            playSound('click');
-            const val = document.getElementById('passInput').value;
-            if(val === "TSX2026") window.location.href = "operaciones.html";
-            else if(val === "TSX-ART") window.location.href = "proyectos.html";
-            else {
-                const err = document.getElementById('error');
-                err.style.display = 'block';
-                document.querySelector('.panel-glass').animate([
-                    { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
-                ], { duration: 300 });
-            }
-        }
-        document.getElementById('passInput').addEventListener('keypress', (e) => { if(e.key==='Enter') verificarAcceso(); });
-
-        // --- 6. EASTER EGG NUCLEAR ---
-        let buffer = "";
-        document.addEventListener('keyup', (e) => {
-            buffer += e.key.toUpperCase();
-            if(buffer.length > 5) buffer = buffer.slice(-5);
-            if(buffer === "OMEGA") {
-                document.body.classList.add('nuclear-active');
-                playSound('virus');
-                const m = document.getElementById('nuclearModal');
-                m.style.display = 'flex'; setTimeout(()=>m.classList.add('open'), 10);
-            }
-        });
-        function detenerNuclear() {
-            document.body.classList.remove('nuclear-active');
-            const audio = document.getElementById('sfx-virus');
-            if(audio) { audio.pause(); audio.currentTime = 0; }
-            cerrarModal('nuclearModal');
-        }
-    </script>
 </body>
 </html>
