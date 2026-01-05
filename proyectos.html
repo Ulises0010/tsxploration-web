@@ -1,210 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head><script defer src="tsx-security.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TSX | Creation Studio</title>
-    <style>
-        /* --- ESTILOS BÁSICOS Y FUTURISTAS --- */
-        :root {
-            --bg: #050505;
-            --card-bg: #111;
-            --neon-purple: #bc13fe;
-            --neon-blue: #00f2ea;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; padding: 20px; overflow-x: hidden; }
-        
-        header { text-align: center; margin-bottom: 50px; padding: 30px; border-bottom: 1px solid #222; position: relative; }
-        header::after { content: ''; position: absolute; bottom: -1px; left: 20%; right: 20%; height: 1px; background: linear-gradient(90deg, transparent, var(--neon-purple), transparent); }
-        h1 { font-size: 2.5rem; letter-spacing: 5px; text-shadow: 0 0 15px rgba(188, 19, 254, 0.5); }
-        .subtitle { color: var(--neon-blue); font-size: 1rem; text-transform: uppercase; letter-spacing: 4px; }
+    <title>TSX OPERATIONS | Proyectos</title>
 
-        /* --- GRID PRINCIPAL --- */
-        .gallery { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; 
-        }
-        .project-card {
-            background: var(--card-bg); border-radius: 20px; overflow: hidden; transition: 0.4s;
-            border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .project-card:hover { transform: translateY(-10px); border-color: var(--neon-purple); box-shadow: 0 0 25px rgba(188, 19, 254, 0.2); }
-        .preview { height: 200px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
-        .info { padding: 25px; }
-        .tag { background: linear-gradient(45deg, var(--neon-purple), #6a00ff); color: white; padding: 4px 12px; font-size: 0.7rem; border-radius: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-view { 
-            display: block; width: 100%; margin-top: 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--neon-purple); color: var(--neon-purple); text-align: center; text-decoration: none; border-radius: 8px; transition: 0.3s; cursor: pointer; font-size: 1rem; font-weight: bold; letter-spacing: 2px;
-        }
-        .btn-view:hover { background: var(--neon-purple); color: #fff; box-shadow: 0 0 20px var(--neon-purple); }
-
-        /* --- EL HOLODECK (Modal de Lujo) --- */
-        .holo-modal {
-            display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(5, 5, 9, 0.95); /* Fondo muy oscuro */
-            backdrop-filter: blur(15px);
-            animation: fadeIn 0.4s ease;
-        }
-
-        .holo-content {
-            position: relative; margin: 4vh auto; width: 90%; max-width: 1100px; height: 90vh;
-            background: rgba(20, 20, 25, 0.7); border: 1px solid rgba(0, 242, 234, 0.3);
-            border-radius: 24px; padding: 30px; overflow-y: auto;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 0 30px rgba(0, 242, 234, 0.2);
-            display: flex; flex-direction: column;
-        }
-        
-        /* Encabezado del Modal */
-        .holo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .holo-title { font-size: 1.5rem; letter-spacing: 3px; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
-        .close-btn { color: #fff; font-size: 2rem; cursor: pointer; transition: 0.3s; }
-        .close-btn:hover { color: var(--neon-purple); text-shadow: 0 0 15px var(--neon-purple); transform: rotate(90deg); }
-
-        /* --- VISTA 1: LA GALERÍA DE VIDEOS --- */
-        #video-grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; animation: slideUp 0.5s ease; }
-        
-        .video-thumbnail {
-            background: var(--glass); border: 2px solid rgba(255,255,255,0.1); border-radius: 15px;
-            height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
-        }
-        .video-thumbnail::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); opacity: 0; transition: 0.4s; z-index: 1; }
-        .video-thumbnail:hover { border-color: var(--neon-blue); transform: scale(1.03); box-shadow: 0 0 25px rgba(0, 242, 234, 0.4); }
-        .video-thumbnail:hover::before { opacity: 0.1; }
-        
-        .thumb-icon { font-size: 3rem; color: rgba(255,255,255,0.5); z-index: 2; transition: 0.3s; }
-        .thumb-title { margin-top: 15px; font-weight: bold; letter-spacing: 1px; z-index: 2; }
-        .video-thumbnail:hover .thumb-icon { color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-
-        /* --- VISTA 2: EL REPRODUCTOR ACTIVO --- */
-        #player-view { display: none; height: 100%; flex-direction: column; animation: zoomIn 0.4s ease; }
-        
-        .player-wrapper {
-            flex-grow: 1; border-radius: 15px; overflow: hidden; border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 40px rgba(188, 19, 254, 0.4); background: black; display: flex; align-items: center;
-        }
-        video { width: 100%; height: auto; max-height: 70vh; outline: none; }
-        
-        .back-to-grid {
-            margin-bottom: 20px; padding: 10px 20px; background: transparent; border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); border-radius: 30px; cursor: pointer; font-weight: bold; letter-spacing: 2px; transition: 0.3s; align-self: flex-start; display: flex; align-items: center; gap: 10px;
-        }
-        .back-to-grid:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
-
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-        @keyframes slideUp { from{opacity:0; transform: translateY(30px)} to{opacity:1; transform: translateY(0)} }
-        @keyframes zoomIn { from{opacity:0; transform: scale(0.9)} to{opacity:1; transform: scale(1)} }
-    </style>
+    <link rel="stylesheet" href="tsx-style.css">
+    <link rel="stylesheet" href="tsx-proyectos.css">
+    <script defer src="tsx-proyectos.js"></script>
 </head>
+
 <body>
 
-    <header>
-        <h1>NEXUS CREATIVO TSX</h1>
-        <div class="subtitle">Bóveda de Proyectos Clasificados</div>
+    <!-- HEADER -->
+    <header class="tsx-header">
+        <div class="tsx-logo">TSX OPERATIONS</div>
+        <nav class="tsx-nav">
+            <a href="operaciones.html">Operaciones</a>
+            <a href="proyectos.html" class="active">Proyectos</a>
+            <a href="index.html">Salir</a>
+        </nav>
     </header>
 
-    <div class="gallery">
-        <div class="project-card" style="border-color: var(--neon-purple);">
-            <div class="preview" style="color: var(--neon-purple); text-shadow: 0 0 15px var(--neon-purple);">⚡</div>
-            <div class="info">
-                <span class="tag">Archivo Audiovisual</span>
-                <h3>Cortometrajes & Pruebas</h3>
-                <p>Acceso a la base de datos de videos en desarrollo.</p>
-                <button class="btn-view" onclick="abrirBoveda()">▶ ACCEDER AL HOLODECK</button>
-            </div>
-        </div>
-    </div>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="proyectos-container">
 
-    <div id="holoModal" class="holo-modal">
-        <div class="holo-content">
-            <div class="holo-header">
-                <div class="holo-title">/// ARCHIVO DE VIDEO TSX ///</div>
-                <div class="close-btn" onclick="cerrarBoveda()">&times;</div>
+        <h1 class="titulo-modulo">PROYECTOS</h1>
+        <p class="subtitulo-modulo">Panel de desarrollo y estado de tus iniciativas TSX</p>
+
+        <!-- GRID DE PROYECTOS -->
+        <div class="proyectos-grid">
+
+            <!-- TARJETA DE PROYECTO -->
+            <div class="proyecto-card" data-id="1">
+                <h2 class="proyecto-titulo">TSXPLORATION 2.0</h2>
+                <p class="proyecto-desc">Reconstrucción del sistema principal con arquitectura modular.</p>
+                <span class="proyecto-estado activo">Activo</span>
             </div>
 
-            <div id="video-grid-view">
-                <div class="video-thumbnail" onclick="cargarVideo('demo.mp4')">
-                    <div class="thumb-icon">🎬</div>
-                    <div class="thumb-title">Proyecto Alpha (Demo)</div>
-                </div>
-                
-                <div class="video-thumbnail" onclick="cargarVideo('v2.mp4')">
-                    <div class="thumb-icon">🎞️</div>
-                    <div class="thumb-title">Prueba de Concepto B</div>
-                </div>
+            <div class="proyecto-card" data-id="2">
+                <h2 class="proyecto-titulo">Avatar TSX</h2>
+                <p class="proyecto-desc">Diseño del asistente holográfico animado.</p>
+                <span class="proyecto-estado concepto">Concepto</span>
+            </div>
 
-                <div class="video-thumbnail" onclick="cargarVideo('v3.mp4')">
-                    <div class="thumb-icon">📼</div>
-                    <div class="thumb-title">Archivo Residual C</div>
-                </div>
-                
-                 </div>
-
-            <div id="player-view">
-                <button class="back-to-grid" onclick="volverAlGrid()">← VOLVER A LA SELECCIÓN</button>
-                <div class="player-wrapper">
-                    <video id="mainVideoPlayer" controls>
-                        <source id="videoSource" src="" type="video/mp4">
-                        Tu navegador no soporta video HTML5.
-                    </video>
-                </div>
+            <div class="proyecto-card" data-id="3">
+                <h2 class="proyecto-titulo">TSX OPERATIONS</h2>
+                <p class="proyecto-desc">Dashboard central de control y monitoreo.</p>
+                <span class="proyecto-estado pausa">En pausa</span>
             </div>
 
         </div>
+    </main>
+
+    <!-- MODAL DETALLES -->
+    <div id="modalProyecto" class="ts-modal">
+        <div class="modal-card proyecto-modal-card">
+            <h2 id="modalTitulo"></h2>
+            <p id="modalDescripcion"></p>
+            <p id="modalEstado"></p>
+
+            <button class="close-btn-modal" data-close>CERRAR</button>
+        </div>
     </div>
-
-
-    <script>
-        // --- CEREBRO DEL HOLODECK ---
-        const modal = document.getElementById('holoModal');
-        const gridView = document.getElementById('video-grid-view');
-        const playerView = document.getElementById('player-view');
-        const videoPlayer = document.getElementById('mainVideoPlayer');
-        const videoSource = document.getElementById('videoSource');
-
-        // 1. Abrir el lobby principal
-        function abrirBoveda() {
-            modal.style.display = "block";
-            volverAlGrid(); // Siempre empezar en el grid
-        }
-
-        // 2. Cerrar todo
-        function cerrarBoveda() {
-            modal.style.display = "none";
-            detenerVideo();
-        }
-
-        // 3. Cargar un video específico
-        function cargarVideo(nombreArchivo) {
-            // Ocultar grid, mostrar reproductor
-            gridView.style.display = "none";
-            playerView.style.display = "flex";
-            
-            // Cargar la ruta correcta
-            videoSource.src = "videos/" + nombreArchivo;
-            videoPlayer.load(); // Recargar el elemento de video con la nueva fuente
-            videoPlayer.play(); // Empezar la acción
-        }
-
-        // 4. Volver del reproductor al grid
-        function volverAlGrid() {
-            detenerVideo();
-            playerView.style.display = "none";
-            gridView.style.display = "grid";
-        }
-
-        // Función auxiliar para parar el video
-        function detenerVideo() {
-            videoPlayer.pause();
-            videoPlayer.currentTime = 0;
-        }
-
-        // Cerrar si hacen clic fuera del contenido
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                cerrarBoveda();
-            }
-        }
-    </script>
 
 </body>
 </html>
