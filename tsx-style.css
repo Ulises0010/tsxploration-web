@@ -1,0 +1,358 @@
+/* ============================================================
+   TSXPLORATION 2.0 — ESTILO PRINCIPAL
+   Cinematic UI • Glassmorphism • Sci‑Fi Aesthetic
+   ============================================================ */
+
+/* ------------------------------
+   1. VARIABLES DE COLOR
+--------------------------------*/
+:root {
+    --gold: #d4af37;
+    --accent-blue: #00c6ff;
+    --mystic-purple: #bc13fe;
+    --nuclear-red: #ff0000;
+
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------
+   2. BASE DEL SISTEMA
+--------------------------------*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141e30);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+
+    color: #fff;
+}
+
+/* Fondo animado */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ------------------------------
+   3. SECUENCIA DE INICIO
+--------------------------------*/
+.boot-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: bootFade 2.5s forwards;
+}
+
+.boot-logo {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 10px;
+    color: var(--gold);
+}
+
+.boot-text {
+    margin-top: 20px;
+    color: #888;
+    font-size: 1rem;
+    letter-spacing: 3px;
+}
+
+@keyframes bootFade {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* ------------------------------
+   4. PARTÍCULAS
+--------------------------------*/
+#particle-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ------------------------------
+   5. BOTÓN DE ACCESO
+--------------------------------*/
+.access-btn-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.access-btn {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--glass-border);
+    color: #aaa;
+    padding: 8px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.access-btn:hover {
+    color: #fff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+    transform: scale(1.05);
+}
+
+/* ------------------------------
+   6. BARRA DE IDIOMAS
+--------------------------------*/
+.lang-bar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 15px;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(5px);
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.lang-btn.active {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* ------------------------------
+   7. MARCA
+--------------------------------*/
+.brand-container {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+.logo {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 8px;
+    background: linear-gradient(to right, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.spade {
+    color: var(--gold);
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+    animation: pulseSpade 3s infinite alternate;
+}
+
+@keyframes pulseSpade {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.1); opacity: 1; }
+}
+
+.tagline {
+    margin-top: 15px;
+    font-size: 1rem;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ------------------------------
+   8. PANEL DE AUTENTICACIÓN
+--------------------------------*/
+.panel-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    padding: 40px;
+    border-radius: 20px;
+    width: 360px;
+    text-align: center;
+    animation: fadeInUp 1.5s ease-out 0.3s backwards;
+}
+
+.input-label {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    color: rgba(255,255,255,0.5);
+}
+
+.input-code {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    transition: 0.4s;
+}
+
+.input-code:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 25px rgba(0, 198, 255, 0.3);
+}
+
+.btn-enter {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--accent-blue), #0056b3);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.btn-enter:hover {
+    transform: scale(1.02);
+}
+
+.error-msg {
+    color: #ff5b5b;
+    margin-top: 20px;
+    font-weight: 600;
+    display: none;
+}
+
+/* ------------------------------
+   9. MODALES
+--------------------------------*/
+.ts-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 300;
+    backdrop-filter: blur(15px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.ts-modal.open {
+    opacity: 1;
+}
+
+.modal-card {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    width: 90%;
+    max-width: 600px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ts-modal.open .modal-card {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modal-title {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+.modal-text {
+    color: #ccc;
+    line-height: 1.8;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    text-align: justify;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.close-btn-modal {
+    padding: 10px 30px;
+    background: transparent;
+    border: 1px solid #555;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close-btn-modal:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+/* ------------------------------
+   10. MODO NUCLEAR
+--------------------------------*/
+.nuclear-bg {
+    background: rgba(50,0,0,0.9);
+}
+
+.nuclear-card {
+    border: 2px solid var(--nuclear-red);
+    background: #1a0000;
+}
+
+.nuclear-symbol {
+    font-size: 4rem;
+    color: var(--nuclear-red);
+    animation: pulseNuclear 0.5s infinite alternate;
+}
+
+@keyframes pulseNuclear {
+    from { opacity: 0.5; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+/* ------------------------------
+   11. ANIMACIONES GENERALES
+--------------------------------*/
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
