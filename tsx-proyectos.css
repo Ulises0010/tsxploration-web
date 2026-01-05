@@ -1,0 +1,89 @@
+/* ============================================================
+   TSX OPERATIONS — MÓDULO PROYECTOS
+   Estética: Glassmorphism + Sci‑Fi + Minimalismo TSX
+   ============================================================ */
+.proyectos-container {
+    width: 90%;
+    max-width: 1200px;
+    margin-top: 120px;
+    text-align: center;
+    animation: fadeInUp 1.2s ease-out;
+}
+.titulo-modulo {
+    font-size: 2.5rem;
+    letter-spacing: 8px;
+    margin-bottom: 10px;
+}
+
+.subtitulo-modulo {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 40px;
+}
+.proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+.proyecto-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: left;
+    position: relative;
+}
+
+.proyecto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 198, 255, 0.3);
+}
+.proyecto-titulo {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.proyecto-desc {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+.proyecto-estado {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.activo {
+    background: rgba(0,255,150,0.2);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+.pausa {
+    background: rgba(255,200,0,0.2);
+    color: #ffcc00;
+    border: 1px solid #ffcc00;
+}
+
+.concepto {
+    background: rgba(0,150,255,0.2);
+    color: #00c6ff;
+    border: 1px solid #00c6ff;
+}
+
+.completado {
+    background: rgba(150,150,150,0.2);
+    color: #ccc;
+    border: 1px solid #ccc;
+}
+.proyecto-modal-card {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 40px rgba(0, 198, 255, 0.3);
+}
