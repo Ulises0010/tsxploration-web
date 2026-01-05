@@ -1,0 +1,190 @@
+/* ============================================================
+   TSX OPERATIONS — DASHBOARD PRINCIPAL
+   Estética: Minimalista + Militar + Sci‑Fi Cinematográfico
+   ============================================================ */
+
+/* ------------------------------
+   1. LAYOUT GENERAL
+--------------------------------*/
+body {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ------------------------------
+   2. SIDEBAR (Panel Lateral)
+--------------------------------*/
+.tsx-sidebar {
+    width: 240px;
+    background: rgba(0,0,0,0.4);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: fadeInLeft 1s ease-out;
+}
+
+.sidebar-logo {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.3s;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.sidebar-nav .active {
+    background: var(--accent-blue);
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0,198,255,0.4);
+}
+
+.sidebar-exit {
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-exit:hover {
+    border-color: var(--nuclear-red);
+    color: var(--nuclear-red);
+}
+
+/* ------------------------------
+   3. PANEL PRINCIPAL
+--------------------------------*/
+.tsx-main {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    animation: fadeInUp 1s ease-out;
+}
+
+/* ------------------------------
+   4. HEADER SUPERIOR
+--------------------------------*/
+.tsx-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.header-title {
+    font-size: 2.2rem;
+    letter-spacing: 6px;
+}
+
+.header-info {
+    font-size: 1rem;
+    color: #aaa;
+}
+
+/* ------------------------------
+   5. WIDGETS
+--------------------------------*/
+.widgets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.widget-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 18px;
+    transition: 0.3s;
+}
+
+.widget-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0,198,255,0.3);
+}
+
+.widget-card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.widget-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-blue);
+}
+
+/* ------------------------------
+   6. PANEL HOLOGRÁFICO
+--------------------------------*/
+.holo-panel {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(25px);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.holo-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(0,198,255,0.2), transparent);
+    animation: holoScan 3s infinite;
+}
+
+@keyframes holoScan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.holo-panel h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.holo-panel p {
+    color: #ccc;
+}
+
+/* ------------------------------
+   7. ANIMACIONES
+--------------------------------*/
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
